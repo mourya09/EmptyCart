@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cer.persistent.Currency;
 import com.cer.persistent.CurrencyExchangeRate;
 import com.cer.services.CERService;
+import com.cer.vo.ConvertCurrencyVO;
 import com.cer.vo.CurrencyVO;
 
 /**
@@ -29,7 +30,7 @@ public class CurrencyExchangeController {
 	@Autowired
 	private CERService cerService;
 	@CrossOrigin
-	@RequestMapping(value = "/GetAllCurrencyInformation", method = RequestMethod.GET)
+	@RequestMapping(value = "/GetAllCurrencyInformation", method = RequestMethod.POST)
 	public @ResponseBody List<Currency> getAllCurrency() {
 		logger.info("getAllCurrency start");
 		List<Currency> list = null;
@@ -38,8 +39,8 @@ public class CurrencyExchangeController {
 		return list;
 	}
 	@CrossOrigin
-	@RequestMapping(value = "/GetACurrencyInformation", method = RequestMethod.GET)
-	public @ResponseBody CurrencyVO getASpecificCurrency(@PathVariable(value="currencySymbol") String currencySymbol) {
+	@RequestMapping(value = "/GetACurrencyInformation", method = RequestMethod.POST)
+	public @ResponseBody CurrencyVO getASpecificCurrency(@RequestBody(required=true) String currencySymbol) {
 		logger.info("getASpecificCurrency start");
 		CurrencyVO result = new CurrencyVO();
 		if (currencySymbol == null || "".equalsIgnoreCase(currencySymbol)) {
@@ -61,7 +62,7 @@ public class CurrencyExchangeController {
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value = "/GetAllCurrencyExchange", method = RequestMethod.GET)
+	@RequestMapping(value = "/GetAllCurrencyExchange", method = RequestMethod.POST)
 	public @ResponseBody List<CurrencyExchangeRate> getAllCurrencyInformation() {
 		logger.info("getAllCurrencyInformation start");
 		
@@ -71,21 +72,19 @@ public class CurrencyExchangeController {
 		return list;
 	}
 	@CrossOrigin
-	@RequestMapping(value = "/CurrencyConvert", method = RequestMethod.GET)
-	public @ResponseBody Double convertOneCurrencyToAnother(@PathVariable(value="convertFromSymbol")
-		String convertFromSymbol, @PathVariable(value="convertToSymbol") String convertToSymbol, @PathVariable(value="currencyQty")
-		Double currencyQty
+	@RequestMapping(value = "/CurrencyConvert", method = RequestMethod.POST)
+	public @ResponseBody Double convertOneCurrencyToAnother(@RequestBody(required=true) ConvertCurrencyVO cCurrencyVO
 			) {
 		logger.info("getAllCurrencyInformation start");
 		
-		CurrencyExchangeRate currencyExchange = cerService.getACurrencyExchangeRate(convertFromSymbol, convertToSymbol);
+		CurrencyExchangeRate currencyExchange = cerService.getACurrencyExchangeRate(cCurrencyVO.getConvertFromSymbol(), cCurrencyVO.getConvertToSymbol());
 		Double result = null;
-		if(currencyQty == null || currencyQty == 0)
+		if(cCurrencyVO.getCurrencyQty() == null || cCurrencyVO.getCurrencyQty() == 0)
 		{
 			result = currencyExchange.getConversationRate();
 		}else
 		{
-			result = currencyExchange.getConversationRate() * currencyQty;
+			result = currencyExchange.getConversationRate() * cCurrencyVO.getCurrencyQty();
 		}
 		logger.info("getAllCurrencyInformation end");
 		return result;
