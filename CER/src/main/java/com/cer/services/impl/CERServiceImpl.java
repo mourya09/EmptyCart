@@ -179,7 +179,7 @@ public class CERServiceImpl implements CERService {
 		logger.info("getAllCurrency start ");
 		List<Currency> result = null;
 		try{
-		result = cerDao.find("from Currency");
+		result = cerDao.find("from Currency order by currencyID asc");
 				
 		}catch( Exception ex)
 		{
@@ -391,7 +391,7 @@ public class CERServiceImpl implements CERService {
 		List<CurrencyExchangeRate> result = null;
 		try {
 
-			result = cerDao.find("find CurrencyExchangeRate");
+			result = cerDao.find("from CurrencyExchangeRate order by currencyId.currencyID asc");
 			
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
@@ -459,4 +459,31 @@ public class CERServiceImpl implements CERService {
 		return result;
 	}
 
+	@Transactional(isolation=Isolation.READ_COMMITTED, readOnly=true)
+	public CurrencyExchangeRate getACurrencyExchangeRate(String convertFromCurrenySymbol, String convertToCurrencySymbol)
+	{
+		logger.info("getACurrencyExchangeRate start ");
+		CurrencyExchangeRate result = null;
+		try {
+
+			List<CurrencyExchangeRate> resultList = cerDao
+					.find("find CurrencyExchangeRate where currencyId.currencyShortName=? and childCurrencyDetails.currencyShortName=?", new Object[]{convertFromCurrenySymbol,convertToCurrencySymbol });
+			if (resultList.size() > 0) {
+				CurrencyExchangeRate cer = resultList.get(0);
+
+				List<Currency> childCurrencyList = cerDao.find(
+						"SELECT childCurrencyDetails from CurrencyExchangeRate where currencyId.currencyID=?",
+						cer.getCurrencyId().getCurrencyID());
+				for (Currency cur : childCurrencyList) {
+					cer.getChildCurrency().add(cur);
+				}
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			ex.printStackTrace();
+		}
+		logger.info("getACurrencyExchangeRate end ");
+		return result;
+		
+	}
 }

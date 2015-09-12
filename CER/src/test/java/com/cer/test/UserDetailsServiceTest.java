@@ -45,6 +45,7 @@ public class UserDetailsServiceTest {
 		u.setLastName("Kumar1");
 		u.setEmailID("mourya.09@gmail.com");
 		u.setPassword("mourya09");
+		u.setUsername("webspark");
 		u.setCreationDate(new Date());
 		u.setLastModifiedDate(new Date());
 		userDetailsService.addUsersDetails(u);
@@ -62,6 +63,9 @@ public class UserDetailsServiceTest {
 		u.setId(1L);
 		u.setPassword("mourya09");
 		u.setEmailID("mourya.0911@gmail.com");
+		u.setPassword("mourya09");
+		u.setUsername("webspark");
+		u.setCreationDate(new Date());
 		u.setLastModifiedDate(new Date());
 		u = userDetailsService.updateUserDetails(u);
 		if(u.getFirstName().equals("John"))

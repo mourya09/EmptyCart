@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.type.TimestampType;
@@ -49,6 +50,8 @@ public class Currency {
 	@Column(name="LAST_MODIFIED_DATE")
 	private Date lastModifiedDate;
 
+	@Transient
+	public String error;
 	
 	public String getCurrencyID() {
 		return currencyID;

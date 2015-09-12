@@ -73,4 +73,9 @@ public interface CERService {
 	 * */
 	public CurrencyExchangeRate getACurrencyExchangeRate(Long currencyId);
 	
+	/**
+	 * Converting one currency to another curreny
+	 * */
+	public CurrencyExchangeRate getACurrencyExchangeRate(String convertFromCurrenySymbol, String convertToCurrencySymbol);
+	
 }
