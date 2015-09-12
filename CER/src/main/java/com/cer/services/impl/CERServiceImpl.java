@@ -226,7 +226,7 @@ public class CERServiceImpl implements CERService {
 		List<Currency> temp = null;
 		Currency result = null;
 		try{
-		temp = cerDao.find("from Currency where currencyId=?", currencyId);
+		temp = cerDao.find("from Currency where currencyID=?", currencyId);
 		if(temp != null && temp.size() > 0)
 		{
 			result = temp.get(0);
@@ -460,14 +460,14 @@ public class CERServiceImpl implements CERService {
 	}
 
 	@Transactional(isolation=Isolation.READ_COMMITTED, readOnly=true)
-	public CurrencyExchangeRate getACurrencyExchangeRate(String convertFromCurrenySymbol, String convertToCurrencySymbol)
+	public CurrencyExchangeRate getACurrencyExchangeRate(Long convertFromCurrenyID, Long convertToCurrencyID)
 	{
 		logger.info("getACurrencyExchangeRate start ");
 		CurrencyExchangeRate result = null;
 		try {
 
 			List<CurrencyExchangeRate> resultList = cerDao
-					.find("find CurrencyExchangeRate where currencyId.currencyShortName=? and childCurrencyDetails.currencyShortName=?", new Object[]{convertFromCurrenySymbol,convertToCurrencySymbol });
+					.find("find CurrencyExchangeRate where currencyId.currencyID=? and childCurrencyDetails.currencyID=?", new Object[]{convertFromCurrenyID,convertToCurrencyID });
 			if (resultList.size() > 0) {
 				CurrencyExchangeRate cer = resultList.get(0);
 

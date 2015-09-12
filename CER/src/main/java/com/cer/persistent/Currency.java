@@ -13,7 +13,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.type.TimestampType;
 
 /**
  * @author Praveen Kumar
@@ -27,7 +26,7 @@ public class Currency {
 	@GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
 	@Column(name="CURRENCY_ID")
-	private String currencyID;
+	private Long currencyID;
 	
 	@Column(name="CURRENCY_NAME")
 	private String currencyName;
@@ -53,11 +52,11 @@ public class Currency {
 	@Transient
 	public String error;
 	
-	public String getCurrencyID() {
+	public Long getCurrencyID() {
 		return currencyID;
 	}
 
-	public void setCurrencyID(String currencyID) {
+	public void setCurrencyID(Long currencyID) {
 		this.currencyID = currencyID;
 	}
 

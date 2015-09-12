@@ -9,15 +9,15 @@ package com.cer.vo;
  *
  */
 public class ConvertCurrencyVO {
-	private String convertFromSymbol;
-	private String convertToSymbol;
+	private String convertFromCurrencyId;
+	private String convertToCurrencyId;
 	private Double currencyQty;
 	private String error;
-	public String getConvertFromSymbol() {
-		return convertFromSymbol;
+	public String getConvertFromCurrencyId() {
+		return convertFromCurrencyId;
 	}
-	public String getConvertToSymbol() {
-		return convertToSymbol;
+	public String getConvertToCurrencyId() {
+		return convertToCurrencyId;
 	}
 	public Double getCurrencyQty() {
 		return currencyQty;
@@ -25,11 +25,11 @@ public class ConvertCurrencyVO {
 	public String getError() {
 		return error;
 	}
-	public void setConvertFromSymbol(String convertFromSymbol) {
-		this.convertFromSymbol = convertFromSymbol;
+	public void setConvertFromCurrencyId(String convertFromCurrencyId) {
+		this.convertFromCurrencyId = convertFromCurrencyId;
 	}
-	public void setConvertToSymbol(String convertToSymbol) {
-		this.convertToSymbol = convertToSymbol;
+	public void setConvertToCurrencyId(String convertToCurrencyId) {
+		this.convertToCurrencyId = convertToCurrencyId;
 	}
 	public void setCurrencyQty(Double currencyQty) {
 		this.currencyQty = currencyQty;

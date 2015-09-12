@@ -1,5 +1,6 @@
 package com.cer.restful.services.controller;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import com.cer.persistent.CurrencyExchangeRate;
 import com.cer.services.CERService;
 import com.cer.vo.ConvertCurrencyVO;
 import com.cer.vo.CurrencyVO;
+import com.google.gson.Gson;
 
 /**
  * This is the main controller which will expose all the webservices to any
@@ -40,15 +42,17 @@ public class CurrencyExchangeController {
 	}
 	@CrossOrigin
 	@RequestMapping(value = "/GetACurrencyInformation", method = RequestMethod.POST)
-	public @ResponseBody CurrencyVO getASpecificCurrency(@RequestBody(required=true) String currencySymbol) {
+	public @ResponseBody CurrencyVO getASpecificCurrency(@RequestBody(required=true) String currencyId) {
 		logger.info("getASpecificCurrency start");
 		CurrencyVO result = new CurrencyVO();
-		if (currencySymbol == null || "".equalsIgnoreCase(currencySymbol)) {
+		String[] str = currencyId.split("=");
+		if (currencyId == null ) {
 
 			result.error = "Please provide Valid Currency Symbol";
 			return result;
 		}
-		Currency currency = cerService.getACurrency(currencySymbol);
+		Long id = Long.parseLong(str[1]);
+		Currency currency = cerService.getACurrency(id);
 		if (currency == null) {
 
 			result.error = "Provided Currency Symbol not found with us.";
@@ -73,11 +77,36 @@ public class CurrencyExchangeController {
 	}
 	@CrossOrigin
 	@RequestMapping(value = "/CurrencyConvert", method = RequestMethod.POST)
-	public @ResponseBody Double convertOneCurrencyToAnother(@RequestBody(required=true) ConvertCurrencyVO cCurrencyVO
+	public @ResponseBody Double convertOneCurrencyToAnother(@RequestBody(required=true) String jsonData
 			) {
-		logger.info("getAllCurrencyInformation start");
-		
-		CurrencyExchangeRate currencyExchange = cerService.getACurrencyExchangeRate(cCurrencyVO.getConvertFromSymbol(), cCurrencyVO.getConvertToSymbol());
+		logger.info("convertOneCurrencyToAnother start");
+		//Google Gson is not working as MediaType was not enabled in my CER.xml.
+		//Due to timeconstraint, It can be fix later on.
+		logger.info("Recieved JSON String is " + jsonData);	
+		jsonData = URLDecoder.decode(jsonData) ;
+		String[] str = jsonData.replace("{", "").replace("}", "").split(",");
+		ConvertCurrencyVO cCurrencyVO = new ConvertCurrencyVO();
+		if(str!= null && str[0] != null)
+		{
+			String[] temp =str[0].split(":");
+			cCurrencyVO.setConvertFromCurrencyId(temp[1]);
+			
+		}
+		if(str!= null && str[1] != null)
+		{
+			String[] temp =str[1].split(":");
+			cCurrencyVO.setConvertToCurrencyId(temp[1]);
+			
+		}
+		if(str!= null && str.length > 2&& str[2] != null)
+		{
+			String[] temp =str[2].split(":");
+			cCurrencyVO.setCurrencyQty(Double.parseDouble(temp[1]));
+			
+		}
+		Long currencyFrom = Long.parseLong(cCurrencyVO.getConvertFromCurrencyId());
+		Long currencyTo=Long.parseLong(cCurrencyVO.getConvertToCurrencyId());
+		CurrencyExchangeRate currencyExchange = cerService.getACurrencyExchangeRate(currencyFrom, currencyTo);
 		Double result = null;
 		if(cCurrencyVO.getCurrencyQty() == null || cCurrencyVO.getCurrencyQty() == 0)
 		{
@@ -86,7 +115,7 @@ public class CurrencyExchangeController {
 		{
 			result = currencyExchange.getConversationRate() * cCurrencyVO.getCurrencyQty();
 		}
-		logger.info("getAllCurrencyInformation end");
+		logger.info("convertOneCurrencyToAnother end");
 		return result;
 	}
 }
