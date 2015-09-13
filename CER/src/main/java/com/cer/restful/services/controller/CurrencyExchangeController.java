@@ -83,24 +83,25 @@ public class CurrencyExchangeController {
 		//Google Gson is not working as MediaType was not enabled in my CER.xml.
 		//Due to timeconstraint, It can be fix later on.
 		logger.info("Recieved JSON String is " + jsonData);	
+		jsonData = jsonData.substring(0, jsonData.length() - 1);
 		jsonData = URLDecoder.decode(jsonData) ;
-		String[] str = jsonData.replace("{", "").replace("}", "").split(",");
+		String[] str = jsonData.replace("{", "").replace("}", "").split("&");
 		ConvertCurrencyVO cCurrencyVO = new ConvertCurrencyVO();
 		if(str!= null && str[0] != null)
 		{
-			String[] temp =str[0].split(":");
+			String[] temp =str[0].split("=");
 			cCurrencyVO.setConvertFromCurrencyId(temp[1]);
 			
 		}
 		if(str!= null && str[1] != null)
 		{
-			String[] temp =str[1].split(":");
+			String[] temp =str[1].split("=");
 			cCurrencyVO.setConvertToCurrencyId(temp[1]);
 			
 		}
 		if(str!= null && str.length > 2&& str[2] != null)
 		{
-			String[] temp =str[2].split(":");
+			String[] temp =str[2].split("=");
 			cCurrencyVO.setCurrencyQty(Double.parseDouble(temp[1]));
 			
 		}

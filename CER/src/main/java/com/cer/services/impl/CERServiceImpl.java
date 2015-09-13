@@ -467,16 +467,16 @@ public class CERServiceImpl implements CERService {
 		try {
 
 			List<CurrencyExchangeRate> resultList = cerDao
-					.find("find CurrencyExchangeRate where currencyId.currencyID=? and childCurrencyDetails.currencyID=?", new Object[]{convertFromCurrenyID,convertToCurrencyID });
+					.find("from CurrencyExchangeRate where currencyId.currencyID=? and childCurrencyDetails.currencyID=?", new Object[]{convertFromCurrenyID,convertToCurrencyID });
 			if (resultList.size() > 0) {
-				CurrencyExchangeRate cer = resultList.get(0);
+				result = resultList.get(0);
 
-				List<Currency> childCurrencyList = cerDao.find(
+				/*List<Currency> childCurrencyList = cerDao.find(
 						"SELECT childCurrencyDetails from CurrencyExchangeRate where currencyId.currencyID=?",
 						cer.getCurrencyId().getCurrencyID());
 				for (Currency cur : childCurrencyList) {
 					cer.getChildCurrency().add(cur);
-				}
+				}*/
 			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
