@@ -15,7 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.cer.test.UserDetailsServiceTest;
 import com.cer.persistent.Currency;
 import com.cer.persistent.UserDetails;
 import com.cer.services.CERService;
