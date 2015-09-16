@@ -1,6 +1,5 @@
 package com.cer.restful.services.controller;
 
-import java.net.URLDecoder;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,7 +17,6 @@ import com.cer.persistent.CurrencyExchangeRate;
 import com.cer.services.CERService;
 import com.cer.vo.ConvertCurrencyVO;
 import com.cer.vo.CurrencyVO;
-import com.google.gson.Gson;
 
 /**
  * This is the main controller which will expose all the webservices to any
@@ -77,12 +75,13 @@ public class CurrencyExchangeController {
 	}
 	@CrossOrigin
 	@RequestMapping(value = "/CurrencyConvert", method = RequestMethod.POST)
-	public @ResponseBody Double convertOneCurrencyToAnother(@RequestBody(required=true) String jsonData
+	public @ResponseBody Double convertOneCurrencyToAnother(/*@RequestBody(required=true) String jsonData*/
+			@RequestBody(required=true) ConvertCurrencyVO cCurrencyVO
 			) {
 		logger.info("convertOneCurrencyToAnother start");
 		//Google Gson is not working as MediaType was not enabled in my CER.xml.
 		//Due to timeconstraint, It can be fix later on.
-		logger.info("Recieved JSON String is " + jsonData);	
+		/*logger.info("Recieved JSON String is " + jsonData);	
 		jsonData = jsonData.substring(0, jsonData.length() - 1);
 		jsonData = URLDecoder.decode(jsonData) ;
 		String[] str = jsonData.replace("{", "").replace("}", "").split("&");
@@ -104,7 +103,7 @@ public class CurrencyExchangeController {
 			String[] temp =str[2].split("=");
 			cCurrencyVO.setCurrencyQty(Double.parseDouble(temp[1]));
 			
-		}
+		}*/
 		Long currencyFrom = Long.parseLong(cCurrencyVO.getConvertFromCurrencyId());
 		Long currencyTo=Long.parseLong(cCurrencyVO.getConvertToCurrencyId());
 		CurrencyExchangeRate currencyExchange = cerService.getACurrencyExchangeRate(currencyFrom, currencyTo);

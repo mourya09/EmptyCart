@@ -79,6 +79,7 @@
                             <map>
                                 <entry key="json" value="application/json"/>
                                 <entry key="xml" value="application/xml"/>
+                                <entry key="xml" value="application/x-www-form-urlencoded"/>
                             </map>
                         </constructor-arg>
                     </bean>
