@@ -90,11 +90,7 @@
 			<version>${hibernate.version}</version>
 		</dependency>
 		<!-- Hibernate Spatial -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-spatial</artifactId>
-			<version>4.0</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -158,11 +154,39 @@
 			<artifactId>commons-dbcp2</artifactId>
 			<version>2.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>intel</groupId>
+			<artifactId>intel</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<finalName>CurrencyExchangeRate</finalName>
 		<plugins>
+		<plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.4</version>
+          <executions>
+          <execution>
+              <id>install1</id>
+              <phase>package</phase>
+              <goals>
+                <goal>install-file</goal>
+              </goals>
+              <configuration>
+                <file>C:\Program Files (x86)\Intel\RSSDK\framework\common\pxcclr.java\bin\libpxcclr.java.jar</file>
+                <groupId>intel</groupId>
+                <artifactId>intel</artifactId>
+                <version>1.0</version>
+                <generatePom>false</generatePom>
+                <packaging>jar</packaging>
+              </configuration>
+            </execution>
+          </executions>
+          </plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin.version}</version>
@@ -179,7 +203,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	<repositories>
+	<!-- <repositories>
 		<repository>
 			<id>OSGEO GeoTools repo</id>
 			<url>http://download.osgeo.org/webdav/geotools/</url>
@@ -188,12 +212,12 @@
 			<id>Hibernate Spatial repo</id>
 			<url>http://www.hibernatespatial.org/repository/</url>
 		</repository>
-		<!-- add JBOSS repository for easy access to Hibernate libraries -->
+		add JBOSS repository for easy access to Hibernate libraries
 		<repository>
 			<id>JBOSS</id>
 			<url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
 		</repository>
-		<!-- <repository> <id>Standard Repository</id> <url>https://repo.maven.apache.org/maven2/</url> 
-			</repository> -->
-	</repositories>
+		<repository> <id>Standard Repository</id> <url>https://repo.maven.apache.org/maven2/</url> 
+			</repository>
+	</repositories> -->
 </project>
