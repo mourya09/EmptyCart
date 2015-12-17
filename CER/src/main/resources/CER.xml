@@ -116,7 +116,7 @@
 
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
 
-	
+	<bean id="dcmDao" class="com.cer.dao.impl.DCMDaoImpl" scope="singleton" />
 
 
 
