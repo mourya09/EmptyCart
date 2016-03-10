@@ -3,7 +3,9 @@
  */
 package com.cer.test;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import com.cer.test.UserDetailsServiceTest;
+
 import com.cer.persistent.Currency;
 import com.cer.persistent.UserDetails;
 import com.cer.services.CERService;
@@ -69,5 +71,24 @@ public class CurrencyTest {
 			Assert.fail();
 		}
 		logger.info("addCurrency end ");
+	}
+	
+	@Test
+	public void majeTest()
+ {
+		String str = "SELECT MAP_FUNCTION_NAME FROM MAP_FUNCTIONS WHERE ID IN ( SELECT DISTINCT OBIEEGROUP_MAPFUNCTIONS.MAP_FUNCTIONS_ID FROM OBIEEGROUP_MAPFUNCTIONS WHERE OBIEE_GROUP_NAME =   (SELECT USERGROUP FROM OBIEEUSER WHERE LOWER(USERNAME) = LOWER('#')   )) ORDER BY MAP_FUNCTION_NAME ASC";
+		System.out.println(str.replace("#", "First One"));
+		// System.out.println(str.replace("?", "Second One"));
+	}
+	
+	@Test
+	public void majeeTest()
+	{
+		final ArrayList<Integer> list= new ArrayList<Integer>();
+		for(int i =0; i < 1000000; i++)
+		{
+			list.add(i);
+		}
+		System.out.println(list.size() + " ");
 	}
 }

@@ -11,7 +11,8 @@
 		<spring.version>4.2.1.RELEASE</spring.version>
 		<hibernate.version>4.0.0.Final</hibernate.version>
 		<!-- <postgresql.version>9.4-1201-jdbc4</postgresql.version> -->
-		<postgresql.version>9.4-1206-jdbc42</postgresql.version>
+		<!-- <postgresql.version>9.4-1206-jdbc42</postgresql.version> -->
+		
 		<junit-version>4.11</junit-version>
 		<servlet-api-version>3.0-alpha-1</servlet-api-version>
 		<!--<servlet-api-version>3.1.0</servlet-api-version> -->
@@ -97,12 +98,12 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		<!--PostGreSQL Connector -->
+	<!-- 	PostGreSQL Connector 
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
-		</dependency>
+		</dependency> -->
 
 		<!-- Servlet and JSP -->
 		<dependency>
@@ -167,6 +168,11 @@
 			<!-- <scope>runtime</scope> -->
 			<type>dll</type>
 		</dependency>
+		<dependency>
+			<groupId>org.voltdb</groupId>
+			<artifactId>voltdbclient</artifactId>
+			<version>5.8</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -176,7 +182,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
 				<version>2.4</version>
-				<executions>
+				<!-- <executions>
 					<execution>
 						<id>install1</id>
 						<phase>package</phase>
@@ -207,7 +213,7 @@
 							<packaging>dll</packaging>
 						</configuration>
 					</execution>
-				</executions>
+				</executions> -->
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
