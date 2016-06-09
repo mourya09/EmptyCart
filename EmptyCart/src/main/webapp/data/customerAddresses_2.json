@@ -1,0 +1,67 @@
+[
+	{
+	"name":"Mondip Borah",
+	  "product":"Auto Loan",
+		"address":"E 402, 4th Floor, Maxwell Premier Urban, Sector 15, Part 2,NOIDA,201301",
+		"column2":"E 402, 4th Floor, Maxwell Premier Urban, Sector 15, Part 2,NOIDA,201301",
+		"markerHeight":48,
+		"markerIcon":"cust.png",
+		
+"Latitude":28.58224,
+"Longitude":77.30998,
+
+		"preferedTime":"08:00 AM - 09:00 AM"
+	},
+	{
+	"name":"Tinku Moni Saikia",
+	  "product":"Home Loan",
+		"address":"Times centre, FC-6, film city, sector 16a,NOIDA,201301",
+		"column2":"Times centre, FC-6, film city, sector 16a,NOIDA,201301",
+		"markerHeight":48,
+		"markerIcon":"lead.png",
+		
+"Latitude":28.56982,
+"Longitude":77.31443,
+
+		"preferedTime":"08:00 AM - 09:00 AM"
+	},
+	{
+	"name":"Kanish Upadhya",
+	  "product":"Personal Loan",
+		"address":"A1/04, Tower 2, Silver City, Sector 93,NOIDA,201301",
+		"column2":"A1/04, Tower 2, Silver City, Sector 93,NOIDA,201301",
+		"markerHeight":48,
+		"markerIcon":"cust.png",
+		
+"Latitude":28.51934,
+"Longitude":77.38763,
+
+		"preferedTime":"08:00 AM - 09:00 AM"
+	},
+	{	
+	"name":"Santosh Jedia",
+	  "product":"Auto Loan",
+		"address":"A-303 Icon Apartments Sector CHI-3,NOIDA,201301",
+		"column2":"A-303 Icon Apartments Sector CHI-3,NOIDA,201301",
+		"markerHeight":48,
+		"markerIcon":"cust.png",
+		
+"Latitude":28.52977,
+"Longitude":77.37912,
+
+		"preferedTime":"08:00 AM - 09:00 AM"
+	},
+	{
+	"name":"Salgira Momin",
+	  "product":"Home Loan",
+		"address":"C-101, Central Park-1, Sector-42,NOIDA,201301",
+		"column2":"C-101, Central Park-1, Sector-42,NOIDA,201301",
+		"markerHeight":48,
+		"markerIcon":"lead.png",
+		
+"Latitude":28.55803,
+"Longitude":77.36102,
+
+		"preferedTime":"08:00 AM - 09:00 AM"
+	}	
+]

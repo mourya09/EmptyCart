@@ -1,0 +1,78 @@
+[
+   {
+      "name":"Kumari Ujjwala",
+	  "product":"Auto Loan",
+	  "address":"NEHRU APARTMENT KALKAJI NEW DELHI DELHI 110019",
+	  "preferedTime":"08:00 AM - 09:00 AM",
+      "markerIcon":"cust.png",
+      "markerHeight":48,
+"Latitude":28.53786,
+"Longitude":77.27603,
+      "column2":"102, Nehra Appartment, Kalkaji"
+   },
+   {
+		"name":"Alok Mishra",
+	  "product":"Home Loan",
+      "address":"141A SHAHPUR JAT SIRI FORT NEW DELHI DELHI 110049",
+      "preferedTime":"08:00 AM - 09:00 AM",
+      "markerIcon":"cust.png",
+      "markerHeight":48,
+"Latitude":28.54814,
+"Longitude":77.21628,
+      "column2":"141A, Fourth Floor, Shahpur Jat New Delhi 110049"
+   },
+   {
+   "name":"Ankush Mukherjee",
+	  "product":"Personal Loan",
+      "address":"WATER MEHRAULI MEHRAULI NEW DELHI DELHI 110030",
+      "preferedTime":"08:00 AM - 09:00 AM",
+      "markerIcon":"lead.png",
+      "markerHeight":48,
+	  
+"Latitude":28.52196,
+"Longitude":77.17825,
+
+      "column2":"76/4, ward no:4, near mehrauli water tank, mehrauli Newdelhi 110030"
+   },
+   {
+   "name":"Shikhar Goel",
+	  "product":"Auto Loan",
+      "address":"JAWAHARLAL NEHRU UNIVERSITY JAWAHAR LAL NEHRU UNIVERSITY NEW DELHI DELHI 110067",
+      "preferedTime":"08:00 AM - 09:00 AM",
+      "markerIcon":"lead.png",
+      "markerHeight":48,
+	  
+
+"Latitude":28.54071,
+"Longitude":77.16291,
+
+      "column2":"124, Uttarakhand, Jawaharlal Nehru University, New Delhi"
+   },
+   {
+   "name":"Sampa Kundu",
+	  "product":"Home Loan",
+      "address":"ORIENTAL BANK OF COMMERCE MAHIPALPUR NEW DELHI DELHI 110037",
+      "preferedTime":"08:00 AM - 09:00 AM",
+      "markerIcon":"lead.png",
+      "markerHeight":48,
+	  
+
+"Latitude":28.54276,
+"Longitude":77.12826,
+
+      "column2":"House No. 76, Opposite Oriental Bank of Commerce, Behind Rahul Electronics, Mahipal Pur, New Delhi 1"
+   },
+   {
+   "name":"Santosh Mandal",
+	  "product":"Personal Loan",
+      "address":"IIT DELHI HAUZ KHAS NEW DELHI DELHI 110016",
+      "preferedTime":"08:00 AM - 09:00 AM",
+      "markerIcon":"cust.png",
+      "markerHeight":48,
+	  
+
+"Latitude":28.54471,
+"Longitude":77.19018,
+      "column2":"Qr No:A2/C2, A Type Apartment, IIT Campus, IIT Delhi, Hauz Khas, New Delhi-110016"
+   }
+]

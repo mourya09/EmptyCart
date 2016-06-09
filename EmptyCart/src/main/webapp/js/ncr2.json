@@ -1,0 +1,115 @@
+{
+	"type": "FeatureCollection",
+	"Metadata": [{
+		"type": "String",
+		"name": "SOL_ID"
+	},
+	{
+		"type": "String",
+		"name": "BRANCH_NAME"
+	},
+	{
+		"type": "String",
+		"name": "CITY"
+	},
+	{
+		"type": "String",
+		"name": "STATE"
+	},
+	{
+		"type": "Double",
+		"name": "LATITUDE"
+	},
+	{
+		"type": "Double",
+		"name": "LONGITUDE"
+	},
+	{
+		"type": "String",
+		"name": "ADDRESS"
+	},
+	{
+		"type": "String",
+		"name": "MI_STYLE"
+	},
+	{
+		"type": "Double",
+		"name": "MI_PRINX"
+	},
+	{
+		"type": "Geometry",
+		"name": "GEOLOC",
+		"bbox": [77.27930496,
+		28.52455698,
+		77.31951912,
+		28.60008597]
+	},
+	{
+		"type": "String",
+		"name": "NAME"
+	},
+	{
+		"type": "String",
+		"name": "FEATUREID"
+	},
+	{
+		"type": "Double",
+		"name": "MICODE"
+	},
+	{
+		"type": "Double",
+		"name": "ISENABLED"
+	}],
+	"bbox": [77.27930496,
+	28.52455698,
+	77.31951912,
+	28.60008597],
+	"features": [{
+		"type": "Feature",
+		"id": "639",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [77.27930496,
+			28.52455698]
+		},
+		"properties": {
+			"SOL_ID": "0716",
+			"BRANCH_NAME": "Pitney Bowes Software - New Delhi - Okhla Phase 1",
+			"CITY": "New Delhi",
+			"STATE": "Delhi",
+			"LATITUDE": 28.524557113648,
+			"LONGITUDE": 77.279304504395,
+			"ADDRESS": "A-194, Okhla Industrial Area, Phase-1, A-194, Okhla Industrial Area, Phase-1, Pincode -110020",
+			"MI_STYLE": null,
+			"MI_PRINX": 639,
+			"NAME": "Pitney Bowes Software - New Delhi - Okhla Phase 1",
+			"FEATUREID": "999900000000626",
+			"MICODE": 1.0030311E7,
+			"ISENABLED": 1
+		}
+	},
+	{
+		"type": "Feature",
+		"id": "1551",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [77.31951912,
+			28.60008597]
+		},
+		"properties": {
+			"SOL_ID": "1640",
+			"BRANCH_NAME": "Pitney Bowes Software - Delhi - Vasundhara enclave",
+			"CITY": "New Delhi",
+			"STATE": "Delhi",
+			"LATITUDE": 28.600086212158,
+			"LONGITUDE": 77.319519042969,
+			"ADDRESS": "F4 CSC, DDA Market, Vasundhara Enclave, Near Nav Jagriti GHS Dallupura/Chilla, Pincode -110096",
+			"MI_STYLE": null,
+			"MI_PRINX": 1551,
+			"NAME": "Pitney Bowes Software - Delhi - Vasundhara enclave",
+			"FEATUREID": "9999000000003383",
+			"MICODE": 1.0030311E7,
+			"ISENABLED": 1
+		}
+	}]
+}

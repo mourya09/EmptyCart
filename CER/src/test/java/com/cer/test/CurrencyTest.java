@@ -3,9 +3,10 @@
  */
 package com.cer.test;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,11 +18,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.voltdb.client.Client;
 
 import com.cer.persistent.Currency;
 import com.cer.persistent.UserDetails;
 import com.cer.services.CERService;
 import com.cer.services.UserDetailsService;
+import com.cer.voltdb.VoltClient;
 
 /**
  * @author Praveen Kumar
@@ -38,6 +41,9 @@ public class CurrencyTest {
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private VoltClient voltClient;
 	
 	@Autowired
 	private CERService cerService;
@@ -75,10 +81,20 @@ public class CurrencyTest {
 	
 	@Test
 	public void majeTest()
- {
-		String str = "SELECT MAP_FUNCTION_NAME FROM MAP_FUNCTIONS WHERE ID IN ( SELECT DISTINCT OBIEEGROUP_MAPFUNCTIONS.MAP_FUNCTIONS_ID FROM OBIEEGROUP_MAPFUNCTIONS WHERE OBIEE_GROUP_NAME =   (SELECT USERGROUP FROM OBIEEUSER WHERE LOWER(USERNAME) = LOWER('#')   )) ORDER BY MAP_FUNCTION_NAME ASC";
-		System.out.println(str.replace("#", "First One"));
-		// System.out.println(str.replace("?", "Second One"));
+	{
+		try {
+			Client client = voltClient.getClient();
+			if(client != null)
+			{
+				logger.info("WTF");
+			}
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test

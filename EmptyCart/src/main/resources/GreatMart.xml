@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:sws="http://www.springframework.org/schema/web-services"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+							http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+							http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+							http://www.springframework.org/schema/oxm
+							http://www.springframework.org/schema/oxm/spring-oxm-4.2.xsd
+							http://www.springframework.org/schema/web-services 
+							http://www.springframework.org/schema/web-services/web-services-2.0.xsd
+							http://www.springframework.org/schema/tx
+	   						http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+							http://www.springframework.org/schema/util
+  							http://www.springframework.org/schema/util/spring-util-4.2.xsd
+  							http://www.springframework.org/schema/aop
+	   						http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+
+	<mvc:annotation-driven />
+	<context:component-scan base-package="com.cer" />
+	<context:annotation-config />
+	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+		<property name="prefix" value="/WEB-INF/views/" /> <property name="suffix" 
+		value=".jsp" /> </bean> -->
+	<!-- PROPERTY CONFUGURER -->
+	<bean id="propertyConfigurer" class="com.cer.util.PropertyConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:messages.properties</value>
+				<value>classpath:MS-messages.properties</value>
+				<value>classpath:configuration.properties</value>
+				<value>classpath:sqlQueries.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven transaction-manager="gmTransactionManager" />
+
+	<!-- Transaction Manager -->
+
+	<bean id="gmTransactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceBean" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+		<property name="packagesToScan" value="com.cer.persistent" />
+	</bean>
+	<!-- Declare a JPA entityManagerFactory -->
+
+
+	<bean id="dataSourceBean"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="url" value="${databaseUrlEgis}" />
+		<property name="username" value="${liDatabaseUserName}" />
+		<property name="password" value="${liDatabasePassword}" />
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSourceBean"></property>
+	</bean>
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+	<!-- REST -->
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="contentNegotiationManager">
+			<bean class="org.springframework.web.accept.ContentNegotiationManager">
+				<constructor-arg>
+					<bean
+						class="org.springframework.web.accept.PathExtensionContentNegotiationStrategy">
+						<constructor-arg>
+							<map>
+								<entry key="json" value="application/json" />
+								<entry key="xml" value="application/xml" />
+								<entry key="javascript" value="application/javascript" />
+								<entry key="x-www-form-urlencoded" value="application/x-www-form-urlencoded" />
+							</map>
+						</constructor-arg>
+					</bean>
+				</constructor-arg>
+			</bean>
+		</property>
+
+
+		<property name="defaultViews">
+			<list>
+				<!-- JSON View -->
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+
+				<!-- XML View -->
+				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<constructor-arg>
+						<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+							<property name="packagesToScan">
+								<list>
+									<value>com.cer.controller</value>
+								</list>
+							</property>
+						</bean>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+
+	</bean>
+
+
+
+	<bean id="gmDao" class="com.cer.dao.impl.GMDaoImpl" scope="singleton" />
+
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
+
+	<bean id="dcmDao" class="com.cer.dao.impl.DCMDaoImpl" scope="singleton" />
+
+
+
+</beans>
