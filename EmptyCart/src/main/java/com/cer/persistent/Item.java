@@ -19,7 +19,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name= "\"Item\"")
+@Table(name= "\"Product\"")
 public class Item   implements Serializable{
 
 	/**
@@ -44,6 +44,50 @@ public class Item   implements Serializable{
 	
 	@Column(name="\"Quantity\"")
 	private Long quantity;
+	
+	@Column(name="price")
+	private Double price;
+	
+	
+	@Column(name="sku")
+	private String sku;
+
+	@Column(name="upc")
+	private String upc;
+
+	@Column(name="merchant_commodity_id")
+	private String merchant_commodity_id;
+
+	@Column(name="hs_code")
+	private String hs_code;
+
+	@Column(name="description")
+	private String description;
+
+	@Column(name="url")
+	private String url;
+
+	@Column(name="sizeid")
+	private String sizeid;
+
+	@Column(name="length")
+	private Double length;
+
+	@Column(name="width")
+	private Double width;
+
+	@Column(name="height")
+	private Double height;
+
+	@Column(name="volume")
+	private String volume;
+
+	@Column(name="pictures")
+	private String pictures;
+
+	@Column(name="extension")
+	private String extension;
+
 
 	public Long getId() {
 		return id;
@@ -83,5 +127,117 @@ public class Item   implements Serializable{
 
 	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public String getSku() {
+		return sku;
+	}
+
+	public String getUpc() {
+		return upc;
+	}
+
+	public String getMerchant_commodity_id() {
+		return merchant_commodity_id;
+	}
+
+	public String getHs_code() {
+		return hs_code;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public String getSizeid() {
+		return sizeid;
+	}
+
+	public Double getLength() {
+		return length;
+	}
+
+	public Double getWidth() {
+		return width;
+	}
+
+	public Double getHeight() {
+		return height;
+	}
+
+	public String getVolume() {
+		return volume;
+	}
+
+	public String getPictures() {
+		return pictures;
+	}
+
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
+
+	public void setUpc(String upc) {
+		this.upc = upc;
+	}
+
+	public void setMerchant_commodity_id(String merchant_commodity_id) {
+		this.merchant_commodity_id = merchant_commodity_id;
+	}
+
+	public void setHs_code(String hs_code) {
+		this.hs_code = hs_code;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public void setSizeid(String sizeid) {
+		this.sizeid = sizeid;
+	}
+
+	public void setLength(Double length) {
+		this.length = length;
+	}
+
+	public void setWidth(Double width) {
+		this.width = width;
+	}
+
+	public void setHeight(Double height) {
+		this.height = height;
+	}
+
+	public void setVolume(String volume) {
+		this.volume = volume;
+	}
+
+	public void setPictures(String pictures) {
+		this.pictures = pictures;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
 	}
 }

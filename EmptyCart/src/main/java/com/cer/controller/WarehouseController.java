@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.cer.persistent.WareHouse;
+import com.cer.persistent.Seller;
 import com.cer.services.WarehouseService;
 import com.google.gson.Gson;
 
@@ -33,12 +33,12 @@ public class WarehouseController {
 																			 * "Content-Type=application/json"
 																			 */)
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	private @ResponseBody String saveWareHouse(@ModelAttribute WareHouse wareHouse, BindingResult bindingresult,
+	private @ResponseBody String saveWareHouse(@ModelAttribute Seller seller, BindingResult bindingresult,
 			HttpServletRequest request) {
 		Boolean result = false;
 		String resultString = "null";
 		logger.info("saveWareHouse Start");
-		result = warehouseService.saveWarehouse(wareHouse);
+		result = warehouseService.saveWarehouse(seller);
 		resultString = result.toString();
 		logger.info("saveWareHouse End");
 		return resultString;
@@ -53,7 +53,7 @@ public class WarehouseController {
 	private @ResponseBody String getAllWareHouse() {
 		String result = null;
 		logger.info("getAllWareHouse Start");
-		List<WareHouse> temp = warehouseService.getWarehouseNearVicinity();
+		List<Seller> temp = warehouseService.getWarehouseNearVicinity();
 
 		if (!temp.isEmpty()) {
 			Gson gson = new Gson();
@@ -66,11 +66,11 @@ public class WarehouseController {
 
 	@RequestMapping(value = "/getWareHouseAddress", method = RequestMethod.POST/*, headers = "application/x-www-form-urlencoded; charset=UTF-8"*/)
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	private @ResponseBody String getWareHouseAddress(@ModelAttribute WareHouse wareHouse, BindingResult bindingresult,
+	private @ResponseBody String getWareHouseAddress(@ModelAttribute Seller seller, BindingResult bindingresult,
 			HttpServletRequest request) {
 		String result = null;
 		logger.info("getWareHouseAddress Start");
-		result = warehouseService.getWareHouseAddress(wareHouse.getLocationJson());
+		result = warehouseService.getWareHouseAddress(seller.getLocationJson());
 
 		logger.info("getWareHouseAddress End");
 		return result;
@@ -78,11 +78,11 @@ public class WarehouseController {
 	
 	@RequestMapping(value = "/getNearestWareHouse", method = RequestMethod.POST/*, headers = "application/x-www-form-urlencoded; charset=UTF-8"*/)
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	private @ResponseBody String getNearestWareHouse(@ModelAttribute WareHouse wareHouse, BindingResult bindingresult,
+	private @ResponseBody String getNearestWareHouse(@ModelAttribute Seller seller, BindingResult bindingresult,
 			HttpServletRequest request) {
 		String result = null;
 		logger.info("getNearestWareHouse Start");
-		result = warehouseService.getNearestWareHouse(wareHouse);
+		result = warehouseService.getNearestWareHouse(seller);
 		logger.info("getNearestWareHouse End");
 		return result;
 	}

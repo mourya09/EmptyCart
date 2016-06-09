@@ -18,7 +18,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.cer.dao.GMDao;
-import com.cer.persistent.WareHouse;
+import com.cer.persistent.Seller;
 import com.cer.services.WarehouseService;
 import com.cer.util.GeoJsonConstants;
 import com.cer.util.GeoJsonReader;
@@ -49,7 +49,7 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 	@Autowired
 	private PropertyConfigurer propertyConfigurer;
 	
-	public boolean saveWarehouse(WareHouse warehouse) {
+	public boolean saveWarehouse(Seller warehouse) {
 		logger.info("saveWarehouse start ");
 		boolean result = false;
 		if(warehouse != null )
@@ -99,9 +99,9 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 		return result;
 	}
 
-	public List<WareHouse> getWarehouseNearVicinity() {
+	public List<Seller> getWarehouseNearVicinity() {
 		logger.info("getWarehouseNearVicinity start ");
-		List<WareHouse> result = null;
+		List<Seller> result = null;
 		
 			Geometry geom = null;
 			String sqlQuery = propertyConfigurer.getProperty("GET_NEAREST_WAREHOUSE");
@@ -109,7 +109,7 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 				try {
 					result = gmDao.find(sqlQuery);
 					String jsonString = null;
-					for(WareHouse warehouse: result)
+					for(Seller warehouse: result)
 					{
 						if(warehouse.getLocation() != null)
 						{
@@ -141,11 +141,11 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 	}
 	
 	
-	public WareHouse getAWarehouse(Long warehouseId)
+	public Seller getAWarehouse(Long warehouseId)
 	{
 		logger.info("getAWarehouse start ");
-		WareHouse result = null;
-		List<WareHouse> warehouseList = gmDao.find(propertyConfigurer.getProperty("GET_A_WAREHOUSE"), warehouseId);
+		Seller result = null;
+		List<Seller> warehouseList = gmDao.find(propertyConfigurer.getProperty("GET_A_WAREHOUSE"), warehouseId);
 		if(warehouseList != null && warehouseList.size() > 0)
 		{
 			result = warehouseList.get(0);
@@ -154,7 +154,7 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 		return result;
 	}
 	
-	public String getNearestWareHouse(WareHouse warehouse)
+	public String getNearestWareHouse(Seller warehouse)
  {
 		logger.info("getNearestWareHouse start");
 		String result = null;
@@ -162,7 +162,7 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 				.replace("?", warehouse.getLat()).replace("#", warehouse.getLng()).replace("@", warehouse.getPLZ());
 		logger.info("Created Query is " + sqlQuery);
 		try {
-			List<WareHouse> list = gmDao.nearestWarehouse(sqlQuery);
+			List<Seller> list = gmDao.nearestWarehouse(sqlQuery);
 			if(list != null && list.size() > 0)
 			{
 				Gson gson = new Gson();

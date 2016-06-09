@@ -6,7 +6,7 @@ package com.cer.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.cer.persistent.WareHouse;
+import com.cer.persistent.Seller;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
@@ -61,8 +61,8 @@ public interface GMDao {
 	List executeDataBaseQuery(String sql, String[] values) throws SQLException;
 	
 	
-	public List<WareHouse> nearestWarehouse(Polygon polygon)throws SQLException ;
+	public List<Seller> nearestWarehouse(Polygon polygon)throws SQLException ;
 	
-	public List<WareHouse> nearestWarehouse(String sqlQuery) throws SQLException;
+	public List<Seller> nearestWarehouse(String sqlQuery) throws SQLException;
 	
 }

@@ -50,7 +50,23 @@ protected final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 		}
 		
 		logger.info("getItem End ");
-		return null;
+		return result;
 	}
+	
+	public List<Item> getItem(String item)
+	{
+		logger.info("getItem String search Started ");
+		List<Item> list = null;
+		String sqlQuery = propertyConfigurer.getProperty("GET_STRING_ITEM").replaceAll("#", item.toLowerCase());
+		list = gmDao.find(sqlQuery);
+		if(list.isEmpty())
+		{
+			logger.error("Object not found!!!");
+		}
+		
+		logger.info("getItem String search end ");
+		return list;
+	}
+	
 
 }

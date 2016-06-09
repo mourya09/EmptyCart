@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.hibernate.Query;
@@ -26,7 +24,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.cer.dao.GMDao;
-import com.cer.persistent.WareHouse;
+import com.cer.persistent.Seller;
 import com.cer.util.PropertyConfigurer;
 import com.vividsolutions.jts.geom.Polygon;
 
@@ -175,8 +173,8 @@ public class GMDaoImpl implements GMDao {
 		return null;
 	}
 
-	public List<WareHouse> nearestWarehouse(Polygon polygon) throws SQLException {
-		List<WareHouse> result = null;
+	public List<Seller> nearestWarehouse(Polygon polygon) throws SQLException {
+		List<Seller> result = null;
 		logger.info("nearestWarehouse Start ");
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -197,20 +195,20 @@ public class GMDaoImpl implements GMDao {
 		return result;
 	}
 
-	public List<WareHouse> nearestWarehouse(String sqlQuery) throws SQLException {
+	public List<Seller> nearestWarehouse(String sqlQuery) throws SQLException {
 		logger.info("nearestWarehouse start ");
-		List<WareHouse> result = null;
+		List<Seller> result = null;
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		WareHouse ware = null;
+		Seller ware = null;
 		try {
 			con = dataSource.getConnection();
 			ps = con.prepareStatement(sqlQuery);
 			rs = ps.executeQuery();
-			result = new ArrayList<WareHouse>();
+			result = new ArrayList<Seller>();
 			while (rs.next()) {
-				ware = new WareHouse();
+				ware = new Seller();
 				ware.setId(rs.getLong("ID"));
 				// ID,name, address, ST_AsGeoJSON(servingArea) as servingArea,
 				// ST_AsGeoJSON(location) as location, formatted_address

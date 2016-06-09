@@ -37,8 +37,8 @@
 		  <mapping class="com.cer.persistent.RouteTrackSystem"/>
 		  <mapping class="com.cer.persistent.TruckInformation"/>
 		  <mapping class="com.cer.persistent.UserManagement"/>
-		  <mapping class="com.cer.persistent.WareHouse"/>
-		  <mapping class="com.cer.persistent.WarehouseItems"/>-->
+		  <mapping class="com.cer.persistent.Seller"/>
+		  <mapping class="com.cer.persistent.SellerCatalog"/>-->
 		 
     </session-factory>
 </hibernate-configuration>

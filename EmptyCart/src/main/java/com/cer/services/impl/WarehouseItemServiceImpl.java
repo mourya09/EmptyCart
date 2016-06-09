@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.cer.dao.GMDao;
 import com.cer.persistent.Item;
-import com.cer.persistent.WareHouse;
-import com.cer.persistent.WarehouseItems;
+import com.cer.persistent.Seller;
+import com.cer.persistent.SellerCatalog;
 import com.cer.services.ItemService;
 import com.cer.services.WarehouseItemService;
 import com.cer.services.WarehouseService;
@@ -43,10 +43,10 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 	@Autowired
 	private PropertyConfigurer propertyConfigurer;
 
-	public Boolean saveWarehouseItem(WarehouseItems items) {
+	public Boolean saveWarehouseItem(SellerCatalog items) {
 		logger.info("saveWarehouseItem start ");
 		Boolean result = false;
-		WareHouse wh = warehouseService.getAWarehouse(items.getWhid().getId());
+		Seller wh = warehouseService.getAWarehouse(items.getWhid().getId());
 		if(wh != null )
 		{
 			items.setWhid(wh);
@@ -73,11 +73,11 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 		logger.info("getAllWarehouseItems start ");
 		String result = null;
 		if (warehouseId != null) {
-			List<WarehouseItems> list = gmDao.find(propertyConfigurer.getProperty("GET_ALL_ITEMS_IN_A_WAREHOUSE"),
+			List<SellerCatalog> list = gmDao.find(propertyConfigurer.getProperty("GET_ALL_ITEMS_IN_A_WAREHOUSE"),
 					warehouseId);
 			if (list != null && !list.isEmpty()) {
 				String geoJsonString = null;
-				for (WarehouseItems item : list) {
+				for (SellerCatalog item : list) {
 					if (item.getWhid() != null) {
 						if (item.getWhid().getLocation() != null) {
 							geoJsonString = writer.write(item.getWhid().getLocation());
@@ -106,11 +106,11 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 		logger.info("getItemsPresentInWarehouses start ");
 		String result = null;
 		if (items != null) {
-			List<WarehouseItems> list = gmDao.find(propertyConfigurer.getProperty("GET_ALL_WAREHOUSE_FOR_A_ITEM"),
+			List<SellerCatalog> list = gmDao.find(propertyConfigurer.getProperty("GET_ALL_WAREHOUSE_FOR_A_ITEM"),
 					items);
 			if (list != null && !list.isEmpty()) {
 				String geoJsonString = null;
-				for (WarehouseItems item : list) {
+				for (SellerCatalog item : list) {
 					if (item.getWhid() != null) {
 						if (item.getWhid().getLocation() != null) {
 							geoJsonString = writer.write(item.getWhid().getLocation());
@@ -142,10 +142,10 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 		if(warehouseItemId != null && warehouseItemId > 0)
 		{
 			String sql = propertyConfigurer.getProperty("GET_A_WAREHOUSE_ITEM_FOR_A_ITEM");
-			List<WarehouseItems> list= gmDao.find(sql, warehouseItemId);
+			List<SellerCatalog> list= gmDao.find(sql, warehouseItemId);
 			if(list != null && list.size() > 0)
 			{
-				WarehouseItems temp = list.get(0);
+				SellerCatalog temp = list.get(0);
 				gmDao.delete(temp);
 				result = true;
 			}

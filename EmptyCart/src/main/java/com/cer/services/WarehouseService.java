@@ -2,21 +2,21 @@ package com.cer.services;
 
 import java.util.List;
 
-import com.cer.persistent.WareHouse;
+import com.cer.persistent.Seller;
 
 public interface WarehouseService {
 	
 	
 	
-	public boolean saveWarehouse(WareHouse warehouse);
+	public boolean saveWarehouse(Seller warehouse);
 	
 	
-	public List<WareHouse> getWarehouseNearVicinity();
+	public List<Seller> getWarehouseNearVicinity();
 	
-	public WareHouse getAWarehouse(Long warehouseId);
+	public Seller getAWarehouse(Long warehouseId);
 	
 	public String getWareHouseAddress(String warehouse);
 	
-	public String getNearestWareHouse(WareHouse warehouse);
+	public String getNearestWareHouse(Seller warehouse);
 
 }

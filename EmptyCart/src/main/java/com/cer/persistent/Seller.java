@@ -17,47 +17,47 @@ import com.vividsolutions.jts.geom.Polygon;
 
 
 @Entity
-@Table(name= "\"WareHouse\"")
+@Table(name= "\"Seller\"")
 /*@NamedNativeQueries({
     @NamedNativeQuery(
             name    =   "getAllWarehouse5",
-            query   =   "SELECT * FROM public.\"WareHouse\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 5* 1609.34",
-                        resultClass=WareHouse.class
+            query   =   "SELECT * FROM public.\"Seller\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 5* 1609.34",
+                        resultClass=Seller.class
     ),@NamedNativeQuery(
             name    =   "getAllWarehouse10",
-            query   =   "SELECT * FROM public.\"WareHouse\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 10* 1609.34",
-                        resultClass=WareHouse.class
+            query   =   "SELECT * FROM public.\"Seller\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 10* 1609.34",
+                        resultClass=Seller.class
     ),
     @NamedNativeQuery(
             name    =   "getAllWarehouse15",
-            query   =   "SELECT * FROM public.\"WareHouse\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 15* 1609.34",
-                        resultClass=WareHouse.class
+            query   =   "SELECT * FROM public.\"Seller\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 15* 1609.34",
+                        resultClass=Seller.class
     ),
     @NamedNativeQuery(
             name    =   "getAllWarehouse25",
-            query   =   "SELECT * FROM public.\"WareHouse\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 25* 1609.34",
-                        resultClass=WareHouse.class
+            query   =   "SELECT * FROM public.\"Seller\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 25* 1609.34",
+                        resultClass=Seller.class
     ),
     @NamedNativeQuery(
             name    =   "getAllWarehouse50",
-            query   =   "SELECT * FROM public.\"WareHouse\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 50* 1609.34",
-                        resultClass=WareHouse.class
+            query   =   "SELECT * FROM public.\"Seller\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 50* 1609.34",
+                        resultClass=Seller.class
     ),
     @NamedNativeQuery(
             name    =   "getAllWarehouse75",
-            query   =   "SELECT * FROM public.\"WareHouse\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 75* 1609.34",
-                        resultClass=WareHouse.class
+            query   =   "SELECT * FROM public.\"Seller\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 75* 1609.34",
+                        resultClass=Seller.class
     ),
     @NamedNativeQuery(
             name    =   "getAllWarehouse100",
-            query   =   "SELECT * FROM public.\"WareHouse\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 100* 1609.34",
-                        resultClass=WareHouse.class
+            query   =   "SELECT * FROM public.\"Seller\" WHERE ST_Distance_Sphere(\"servingArea\", ST_MakePoint(?, ?)) <= 100* 1609.34",
+                        resultClass=Seller.class
     )
     
     
 })*/
 
-public class WareHouse implements Serializable {
+public class Seller implements Serializable {
 
 	/**
 	 * 

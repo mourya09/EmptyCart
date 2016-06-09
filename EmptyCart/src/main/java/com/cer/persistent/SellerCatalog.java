@@ -15,8 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 @Entity
-@Table(name= "\"WarehouseItems\"")
-public class WarehouseItems implements Serializable  {
+@Table(name= "\"SellerCatalog\"")
+public class SellerCatalog implements Serializable  {
 
 	/**
 	 * 
@@ -38,7 +38,7 @@ public class WarehouseItems implements Serializable  {
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="whid")
-	private WareHouse whid;
+	private Seller whid;
 
 
 	public Long getId() {
@@ -51,7 +51,7 @@ public class WarehouseItems implements Serializable  {
 	}
 
 
-	public WareHouse getWhid() {
+	public Seller getWhid() {
 		return whid;
 	}
 
@@ -66,7 +66,7 @@ public class WarehouseItems implements Serializable  {
 	}
 
 
-	public void setWhid(WareHouse whid) {
+	public void setWhid(Seller whid) {
 		this.whid = whid;
 	}
 }
