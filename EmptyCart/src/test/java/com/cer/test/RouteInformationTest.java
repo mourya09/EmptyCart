@@ -20,7 +20,7 @@ import com.cer.persistent.TruckInformation;
 import com.cer.services.RouteTrackingService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:GreatMart.xml" })
+@ContextConfiguration(locations = { "classpath:EmptyCart.xml" })
 @TransactionConfiguration(transactionManager = "gmTransactionManager", defaultRollback = false)
 @Transactional
 public class RouteInformationTest {

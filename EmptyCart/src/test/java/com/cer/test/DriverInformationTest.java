@@ -18,7 +18,7 @@ import com.cer.persistent.DriverInformation;
 import com.cer.services.DriverService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:GreatMart.xml" })
+@ContextConfiguration(locations = { "classpath:EmptyCart.xml" })
 @TransactionConfiguration(transactionManager = "gmTransactionManager", defaultRollback = false)
 @Transactional
 public class DriverInformationTest {
