@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cer.dao.GMDao;
 import com.cer.persistent.TruckInformation;
 import com.cer.persistent.Seller;
-import com.cer.services.WarehouseService;
+import com.cer.services.SellerService;
 import com.cer.util.GeoJsonReader;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -30,13 +30,13 @@ import com.vividsolutions.jts.io.ParseException;
 @ContextConfiguration(locations = { "classpath:EmptyCart.xml" })
 @TransactionConfiguration(transactionManager = "gmTransactionManager", defaultRollback = false)
 @Transactional
-public class WareHouseTest {
+public class SellerTest {
 	
 	protected final Logger logger = LoggerFactory.getLogger(RouteInformationTest.class);
 	
 	
 	@Autowired
-	private WarehouseService warehouseService;
+	private SellerService sellerService;
 	
 	/*@Autowired
 	private GMDao gmDao;*/
@@ -52,7 +52,7 @@ public class WareHouseTest {
 			w.setName("WH1");
 			w.setServingAreaJson(servingAreaString);
 			w.setLocationJson("{        \"type\": \"Point\",        \"coordinates\": [          77.21972465515137,          28.63568479924653        ]      }");
-			warehouseService.saveWarehouse(w);
+			sellerService.saveSeller(w);
 			
 			w = new Seller();
 			w.setName("WH2");
@@ -61,14 +61,14 @@ public class WareHouseTest {
 			
 			servingAreaString = "{        \"type\": \"Polygon\",        \"coordinates\": [          [            [              77.25251197814941,              28.566054698253403            ],            [              77.25431442260742,              28.56959760257536            ],            [              77.25946426391602,              28.573441895718876            ],            [              77.26633071899414,              28.57826590797759            ],            [              77.26942062377928,              28.580150227678846            ],            [              77.26633071899414,              28.581356174571            ],            [              77.26435661315918,              28.582863588740366            ],            [              77.26118087768553,              28.58452171937042            ],            [              77.2587776184082,              28.588666931556347            ],            [              77.25757598876952,              28.592585890962393            ],            [              77.25568771362305,              28.59846405613708            ],            [              77.25379943847656,              28.6037390526665            ],            [              77.2518253326416,              28.610520801945892            ],            [              77.25088119506836,              28.61300733365442            ],            [              77.24015235900877,              28.612781287749698            ],            [              77.23380088806152,              28.61067150251294            ],            [              77.22925186157227,              28.609993348258573            ],            [              77.22478866577148,              28.604643311197442            ],            [              77.21294403076172,              28.59183225626861            ],            [              77.21148490905762,              28.579773366439284            ],            [              77.20564842224121,              28.56929608344729            ],            [              77.20779418945312,              28.566356226669377            ],            [              77.20839500427246,              28.569069943534203            ],            [              77.2199821472168,              28.5687684228941            ],            [              77.22556114196777,              28.567788474846722            ],            [              77.2313117980957,              28.565602404009493            ],            [              77.24075317382812,              28.564773192846978            ],            [              77.24770545959471,              28.565300873433618            ],            [              77.25251197814941,              28.566054698253403            ]          ]        ]         }";
 			w.setServingAreaJson(servingAreaString);
-			warehouseService.saveWarehouse(w);
+			sellerService.saveSeller(w);
 			
 			w = new Seller();
 			w.setName("WH3");
 			w.setLocationJson("{        \"type\": \"Point\",        \"coordinates\": [          77.16865539550781,          28.642690467330326        ]      }");
 			w.setServingAreaJson("{        \"type\": \"Polygon\",        \"coordinates\": [          [            [              77.19989776611328,              28.62430900856464            ],            [              77.19474792480469,              28.626117163663878            ],            [              77.20436096191406,              28.64148522441856            ],            [              77.20539093017578,              28.646908708472537            ],            [              77.20573425292969,              28.651428064300305            ],            [              77.20333099365233,              28.6562484958429            ],            [              77.20470428466797,              28.662273723612298            ],            [              77.20985412597656,              28.66438247151326            ],            [              77.20813751220703,              28.671310915880834            ],            [              77.19921112060547,              28.683660484815782            ],            [              77.17723846435547,              28.710463073923208            ],            [              77.15629577636717,              28.698718963995404            ],            [              77.14771270751953,              28.683660484815782            ],            [              77.14050292968749,              28.676130433078256            ],            [              77.13294982910155,              28.66528620762573            ],            [              77.12677001953125,              28.65654976545602            ],            [              77.12608337402344,              28.644498305734405            ],            [              77.1295166015625,              28.62430900856464            ],            [              77.10067749023438,              28.60923983839668            ],            [              77.11784362792969,              28.602005868729954            ],            [              77.13981628417969,              28.60562291582374            ],            [              77.15766906738281,              28.599895867091515            ],            [              77.16934204101562,              28.59567573671796            ],            [              77.18925476074219,              28.60562291582374            ],            [              77.19989776611328,              28.60291014217668            ],            [              77.2067642211914,              28.605924330794295            ],            [              77.2115707397461,              28.609842646718608            ],            [              77.21397399902344,              28.61406220811067            ],            [              77.21054077148436,              28.619788484567405            ],            [              77.19989776611328,              28.62430900856464            ]          ]        ]      }");
 			w.setAddress("WH3, Narayna Vihar, New Delhi ");
-			warehouseService.saveWarehouse(w);
+			sellerService.saveSeller(w);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -82,7 +82,7 @@ public class WareHouseTest {
 	@Test
 	public void testGetWareHouse()
 	{
-		List<Seller> result = warehouseService.getWarehouseNearVicinity();
+		List<Seller> result = sellerService.getSellerNearVicinity();
 		Assert.assertNotNull("Result is coming null for obtaining All the Warehouses", result );
 	}
 

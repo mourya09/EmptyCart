@@ -12,8 +12,8 @@ import com.cer.persistent.Item;
 import com.cer.persistent.Seller;
 import com.cer.persistent.SellerCatalog;
 import com.cer.services.ItemService;
-import com.cer.services.WarehouseItemService;
-import com.cer.services.WarehouseService;
+import com.cer.services.SellerCatalogService;
+import com.cer.services.SellerService;
 import com.cer.util.GeoJsonReader;
 import com.cer.util.GeoJsonWriter;
 import com.cer.util.PropertyConfigurer;
@@ -21,16 +21,16 @@ import com.google.gson.Gson;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
-@Service("warehouseItemService")
-public class WarehouseItemServiceImpl implements WarehouseItemService {
+@Service("sellerCatalogService")
+public class SellerCatalogServiceImpl implements SellerCatalogService {
 	
-protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.class);
+protected final Logger logger = LoggerFactory.getLogger(SellerServiceImpl.class);
 	
 	@Autowired
 	private GMDao gmDao;
 	
 	@Autowired
-	private WarehouseService warehouseService;
+	private SellerService sellerService;
 	
 	@Autowired
 	private ItemService itemService;
@@ -46,7 +46,7 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 	public Boolean saveWarehouseItem(SellerCatalog items) {
 		logger.info("saveWarehouseItem start ");
 		Boolean result = false;
-		Seller wh = warehouseService.getAWarehouse(items.getWhid().getId());
+		Seller wh = sellerService.getASeller(items.getWhid().getId());
 		if(wh != null )
 		{
 			items.setWhid(wh);

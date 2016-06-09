@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.cer.dao.GMDao;
 import com.cer.persistent.Seller;
-import com.cer.services.WarehouseService;
+import com.cer.services.SellerService;
 import com.cer.util.GeoJsonConstants;
 import com.cer.util.GeoJsonReader;
 import com.cer.util.GeoJsonWriter;
@@ -34,9 +34,9 @@ import com.vividsolutions.jts.io.ParseException;
 
 
 
-@Service("warehouseService")
-public class WarehouseServiceImpl implements WarehouseService {
-protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.class);
+@Service("sellerService")
+public class SellerServiceImpl implements SellerService {
+protected final Logger logger = LoggerFactory.getLogger(SellerServiceImpl.class);
 	
 	@Autowired
 	private GMDao gmDao;
@@ -49,7 +49,7 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 	@Autowired
 	private PropertyConfigurer propertyConfigurer;
 	
-	public boolean saveWarehouse(Seller warehouse) {
+	public boolean saveSeller(Seller warehouse) {
 		logger.info("saveWarehouse start ");
 		boolean result = false;
 		if(warehouse != null )
@@ -99,7 +99,7 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 		return result;
 	}
 
-	public List<Seller> getWarehouseNearVicinity() {
+	public List<Seller> getSellerNearVicinity() {
 		logger.info("getWarehouseNearVicinity start ");
 		List<Seller> result = null;
 		
@@ -141,7 +141,7 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 	}
 	
 	
-	public Seller getAWarehouse(Long warehouseId)
+	public Seller getASeller(Long warehouseId)
 	{
 		logger.info("getAWarehouse start ");
 		Seller result = null;
@@ -154,7 +154,7 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 		return result;
 	}
 	
-	public String getNearestWareHouse(Seller warehouse)
+	public String getNearestSeller(Seller warehouse)
  {
 		logger.info("getNearestWareHouse start");
 		String result = null;
@@ -178,7 +178,7 @@ protected final Logger logger = LoggerFactory.getLogger(WarehouseServiceImpl.cla
 		return result;
 	}
 	
-	public String getWareHouseAddress(String warehouse)
+	public String getSellerAddress(String warehouse)
 	{
 		logger.info("getWareHouseAddress start ");
 		String result = "null";

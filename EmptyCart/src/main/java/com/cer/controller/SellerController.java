@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.cer.persistent.Seller;
-import com.cer.services.WarehouseService;
+import com.cer.services.SellerService;
 import com.google.gson.Gson;
 
 @Controller
-public class WarehouseController {
-	protected final Logger logger = LoggerFactory.getLogger(WarehouseController.class);
+public class SellerController {
+	protected final Logger logger = LoggerFactory.getLogger(SellerController.class);
 
 	@Autowired
-	private WarehouseService warehouseService;
+	private SellerService sellerService;
 
 	@RequestMapping(value = "/saveWareHouse", method = RequestMethod.POST/*
 																			 * ,headers
@@ -38,7 +38,7 @@ public class WarehouseController {
 		Boolean result = false;
 		String resultString = "null";
 		logger.info("saveWareHouse Start");
-		result = warehouseService.saveWarehouse(seller);
+		result = sellerService.saveSeller(seller);
 		resultString = result.toString();
 		logger.info("saveWareHouse End");
 		return resultString;
@@ -53,7 +53,7 @@ public class WarehouseController {
 	private @ResponseBody String getAllWareHouse() {
 		String result = null;
 		logger.info("getAllWareHouse Start");
-		List<Seller> temp = warehouseService.getWarehouseNearVicinity();
+		List<Seller> temp = sellerService.getSellerNearVicinity();
 
 		if (!temp.isEmpty()) {
 			Gson gson = new Gson();
@@ -70,7 +70,7 @@ public class WarehouseController {
 			HttpServletRequest request) {
 		String result = null;
 		logger.info("getWareHouseAddress Start");
-		result = warehouseService.getWareHouseAddress(seller.getLocationJson());
+		result = sellerService.getSellerAddress(seller.getLocationJson());
 
 		logger.info("getWareHouseAddress End");
 		return result;
@@ -82,7 +82,7 @@ public class WarehouseController {
 			HttpServletRequest request) {
 		String result = null;
 		logger.info("getNearestWareHouse Start");
-		result = warehouseService.getNearestWareHouse(seller);
+		result = sellerService.getNearestSeller(seller);
 		logger.info("getNearestWareHouse End");
 		return result;
 	}
