@@ -33,7 +33,7 @@
         <mapping class="com.cer.persistent.Currency"/>
          <mapping class="com.cer.persistent.CurrencyExchangeRate"/> 
 		  <mapping class="com.cer.persistent.DriverInformation"/>
-		  <mapping class="com.cer.persistent.Item"/>
+		  <mapping class="com.cer.persistent.Product"/>
 		  <mapping class="com.cer.persistent.RouteTrackSystem"/>
 		  <mapping class="com.cer.persistent.TruckInformation"/>
 		  <mapping class="com.cer.persistent.UserManagement"/>

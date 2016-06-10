@@ -16,8 +16,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cer.persistent.Item;
-import com.cer.services.ItemService;
+import com.cer.persistent.Product;
+import com.cer.services.ProductService;
 
 /**
  * @author Praveen Kumar
@@ -32,19 +32,19 @@ public class ItemTest {
 	protected final Logger logger = LoggerFactory.getLogger(ItemTest.class);
 
 	@Autowired
-	private ItemService itemService;
+	private ProductService productService;
 	
 	@Test
 	public void addItemTest()
 	{
 		logger.info("addItemTest start ");
-		Item item = new Item();
-		item.setBrandName("Titan");
-		item.setName("Tuffan");
-		item.setWeight(50d);
-		item.setQuantity(50l);
-		item.setPrice(2100d);
-		itemService.saveItem(item);
+		Product product = new Product();
+		product.setBrandName("Titan");
+		product.setName("Tuffan");
+		product.setWeight(50d);
+		product.setQuantity(50l);
+		product.setPrice(2100d);
+		productService.saveItem(product);
 		logger.info("addItemTest end ");
 	}
 	
@@ -52,8 +52,8 @@ public class ItemTest {
 	public void getItemTest()
 	{
 		logger.info("getItemTest start ");
-		Item item = itemService.getItem(1l);
-		Assert.assertNotNull(item);
+		Product product = productService.getItem(1l);
+		Assert.assertNotNull(product);
 		logger.info("getItemTest end ");
 	}
 	
@@ -61,8 +61,8 @@ public class ItemTest {
 	public void getItemListTest()
 	{
 		logger.info("getItemListTest start ");
-		List<Item> item = itemService.getItem("Ladybug");
-		Assert.assertNotNull(item);
+		List<Product> product = productService.getItem("Ladybug");
+		Assert.assertNotNull(product);
 		logger.info("getItemListTest end ");
 	}
 }

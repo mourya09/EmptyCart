@@ -33,7 +33,7 @@ public class SellerCatalog implements Serializable  {
 
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="itemid")
-	private Item itemid;
+	private Product itemid;
 	
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
@@ -46,7 +46,7 @@ public class SellerCatalog implements Serializable  {
 	}
 
 
-	public Item getItemid() {
+	public Product getItemid() {
 		return itemid;
 	}
 
@@ -61,7 +61,7 @@ public class SellerCatalog implements Serializable  {
 	}
 
 
-	public void setItemid(Item itemid) {
+	public void setItemid(Product itemid) {
 		this.itemid = itemid;
 	}
 

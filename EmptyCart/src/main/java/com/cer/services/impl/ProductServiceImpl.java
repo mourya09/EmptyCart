@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cer.dao.GMDao;
-import com.cer.persistent.Item;
-import com.cer.services.ItemService;
+import com.cer.persistent.Product;
+import com.cer.services.ProductService;
 import com.cer.util.PropertyConfigurer;
-@Service("itemService")
-public class ItemServiceImpl implements ItemService {
+@Service("productService")
+public class ProductServiceImpl implements ProductService {
 
-protected final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
+protected final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 	
 	@Autowired
 	private GMDao gmDao;
@@ -23,12 +23,12 @@ protected final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 	 @Autowired
 	 private PropertyConfigurer propertyConfigurer;
 	
-	public Boolean saveItem(Item item) {
+	public Boolean saveItem(Product product) {
 		logger.info("saveItem start");
-		if(item != null && item.getName() != null )
+		if(product != null && product.getName() != null )
 		{
-			gmDao.save(item);
-			if(item.getId() != null && item.getId() > 0		)
+			gmDao.save(product);
+			if(product.getId() != null && product.getId() > 0		)
 		{
 				logger.info("saveItem successfully saved");
 				return true;
@@ -38,10 +38,10 @@ protected final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 		return false;
 	}
 
-	public Item getItem(Long itemId) {
+	public Product getItem(Long itemId) {
 		logger.info("getItem start ");
-		Item  result = null;
-		List<Item> temp = null;
+		Product  result = null;
+		List<Product> temp = null;
 		String sqlQuery = propertyConfigurer.getProperty("GET_A_ITEM");
 		temp = gmDao.find(sqlQuery, itemId);
 		if(!temp.isEmpty())
@@ -53,10 +53,10 @@ protected final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 		return result;
 	}
 	
-	public List<Item> getItem(String item)
+	public List<Product> getItem(String item)
 	{
 		logger.info("getItem String search Started ");
-		List<Item> list = null;
+		List<Product> list = null;
 		String sqlQuery = propertyConfigurer.getProperty("GET_STRING_ITEM").replaceAll("#", item.toLowerCase());
 		list = gmDao.find(sqlQuery);
 		if(list.isEmpty())

@@ -20,7 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name= "\"Product\"")
-public class Item   implements Serializable{
+public class Product   implements Serializable{
 
 	/**
 	 * 

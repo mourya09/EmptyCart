@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cer.dao.GMDao;
-import com.cer.persistent.Item;
+import com.cer.persistent.Product;
 import com.cer.persistent.Seller;
 import com.cer.persistent.SellerCatalog;
-import com.cer.services.ItemService;
+import com.cer.services.ProductService;
 import com.cer.services.SellerCatalogService;
 import com.cer.services.SellerService;
 import com.cer.util.GeoJsonReader;
@@ -33,7 +33,7 @@ protected final Logger logger = LoggerFactory.getLogger(SellerServiceImpl.class)
 	private SellerService sellerService;
 	
 	@Autowired
-	private ItemService itemService;
+	private ProductService productService;
 	
 	 private PrecisionModel precisionModel = new PrecisionModel(PrecisionModel.FLOATING);
 		private GeometryFactory geomf = new GeometryFactory(precisionModel, 4326);
@@ -51,12 +51,12 @@ protected final Logger logger = LoggerFactory.getLogger(SellerServiceImpl.class)
 		{
 			items.setWhid(wh);
 		}
-		Item item = itemService.getItem(items.getItemid().getId());
-		if(item != null)
+		Product product = productService.getItem(items.getItemid().getId());
+		if(product != null)
 		{
-			items.setItemid(item);
+			items.setItemid(product);
 		}
-		if(wh != null && item != null)
+		if(wh != null && product != null)
 		{
 			gmDao.save(items);
 			if(items.getId() != null && items.getId() > 0 )
