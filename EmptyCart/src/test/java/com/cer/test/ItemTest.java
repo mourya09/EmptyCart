@@ -17,7 +17,9 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cer.persistent.Product;
+import com.cer.persistent.Seller;
 import com.cer.services.ProductService;
+import com.cer.services.SellerCatalogService;
 
 /**
  * @author Praveen Kumar
@@ -33,6 +35,10 @@ public class ItemTest {
 
 	@Autowired
 	private ProductService productService;
+	
+	
+	@Autowired
+	private SellerCatalogService sellerCatalogService;
 	
 	@Test
 	public void addItemTest()
@@ -55,6 +61,15 @@ public class ItemTest {
 		Product product = productService.getItem(1l);
 		Assert.assertNotNull(product);
 		logger.info("getItemTest end ");
+	}
+	
+	@Test
+	public void getProductTest()
+	{
+		logger.info("getProductTest start ");
+		List<Seller> product = sellerCatalogService.getAllSeller("Tuffan");
+		Assert.assertNotNull(product);
+		logger.info("getProductTest end ");
 	}
 	
 	@Test

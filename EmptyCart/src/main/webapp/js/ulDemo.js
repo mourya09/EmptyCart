@@ -1,4 +1,5 @@
 var GEOAPIS_V1 = GEOAPIS_V1 || {};
+var ALL_SELLERS= null;
 var isTWuseCase = false;
 GEOAPIS_V1.apiDemo = function(){
 	this.apiAddress = window.location.origin;
@@ -291,7 +292,58 @@ GEOAPIS_V1.apiDemo.prototype.showCustomers = function(){
 	}
 
 };
-
+function searchProduct()
+{
+	
+	//var dataToSearch =$.param({name: $('#product').val()}) ;
+	var dataToSearch =
+	new Object();
+	dataToSearch = {name: $('#product').val()} ;
+	//alert(dataToSearch);
+	$.ajax({
+		url: 'getSellerWhoSellsTheProduct.html',
+		data: dataToSearch,
+		type:'POST',
+		cache: false,
+		dataType : "json",
+		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+		success: function(data){
+			ALL_SELLERS = data;
+			var loc = new Microsoft.Maps.Location(parseFloat(ALL_SELLERS[0].lat,10),parseFloat( ALL_SELLERS[0].lng,10));
+			lngArray=[];
+			latArray=[];
+			ALL_SELLERS.sort(function(a,b){
+				return (parseFloat(a.lng,10) -parseFloat(b.lng,10))*(parseFloat(a.lat,10) - parseFloat(b.lat,10));
+			});
+			GSDS.map.entities.clear();
+			for(var _key in ALL_SELLERS)
+			{
+				latArray.push(parseFloat(ALL_SELLERS[_key].lat,10));
+				lngArray.push(parseFloat( ALL_SELLERS[_key].lng,10));
+				// 
+				var loc = new Microsoft.Maps.Location(parseFloat(ALL_SELLERS[_key].lat,10), parseFloat( ALL_SELLERS[_key].lng,10));
+				var pushpinOptions = {icon: 'images/location_icon.png', width: 50, height: 50}; 
+				var pushpin= new Microsoft.Maps.Pushpin(loc, pushpinOptions);
+				GSDS.map.entities.push(pushpin);
+				
+			}
+			latArray.sort(function(a,b){
+				return parseFloat(a,10) - parseFloat(b,10);
+			});
+			
+			var locationArr = [
+					{latitude: latArray[0], longitude:lngArray[0]},
+					{latitude: latArray[latArray.length - 1], longitude: lngArray[lngArray.length - 1]}
+				];
+				
+				var initialViewBounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(locationArr[0].latitude,locationArr[0].longitude), new Microsoft.Maps.Location(locationArr[1].latitude,locationArr[1].longitude));
+			
+			GSDS.map.setView({bounds: initialViewBounds});
+			//GSDS.map.setView({center: loc});
+		}
+	});
+	
+}
 GEOAPIS_V1.apiDemo.prototype.showBranches = function(){
  	var that = this;
 	

@@ -1,12 +1,16 @@
 package com.cer.services;
 
+import java.util.List;
+
+import com.cer.persistent.Seller;
 import com.cer.persistent.SellerCatalog;
 
 public interface SellerCatalogService {
-	public Boolean saveWarehouseItem(SellerCatalog items);
-	public String getAllWarehouseItems(Long warehouseId);
-	public String getItemsPresentInWarehouses(Long item);
-	public Boolean deleteWarehouseItem(Long warehouseItemId);
+	public Boolean saveSellerCatalog(SellerCatalog sellerCatalog);
+	public String getAllSellerCatalog(Long sellerId);
+	public String getProductPresentWithSeller(Long product);
+	public List<Seller> getAllSeller(String product);
+	public Boolean deleteSellerCatalog(Long sellerCatalog);
 	
 	
 

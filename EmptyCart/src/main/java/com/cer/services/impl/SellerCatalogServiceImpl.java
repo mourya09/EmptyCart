@@ -1,5 +1,6 @@
 package com.cer.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -23,53 +24,49 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 @Service("sellerCatalogService")
 public class SellerCatalogServiceImpl implements SellerCatalogService {
-	
-protected final Logger logger = LoggerFactory.getLogger(SellerServiceImpl.class);
-	
+
+	protected final Logger logger = LoggerFactory.getLogger(SellerServiceImpl.class);
+
 	@Autowired
 	private GMDao gmDao;
-	
+
 	@Autowired
 	private SellerService sellerService;
-	
+
 	@Autowired
 	private ProductService productService;
-	
-	 private PrecisionModel precisionModel = new PrecisionModel(PrecisionModel.FLOATING);
-		private GeometryFactory geomf = new GeometryFactory(precisionModel, 4326);
-		private GeoJsonReader reader = new GeoJsonReader(geomf);
-		private GeoJsonWriter writer = new GeoJsonWriter(14);
-	
+
+	private PrecisionModel precisionModel = new PrecisionModel(PrecisionModel.FLOATING);
+	private GeometryFactory geomf = new GeometryFactory(precisionModel, 4326);
+	private GeoJsonReader reader = new GeoJsonReader(geomf);
+	private GeoJsonWriter writer = new GeoJsonWriter(14);
+
 	@Autowired
 	private PropertyConfigurer propertyConfigurer;
 
-	public Boolean saveWarehouseItem(SellerCatalog items) {
+	public Boolean saveSellerCatalog(SellerCatalog items) {
 		logger.info("saveWarehouseItem start ");
 		Boolean result = false;
-		Seller wh = sellerService.getASeller(items.getWhid().getId());
-		if(wh != null )
-		{
-			items.setWhid(wh);
+		Seller wh = sellerService.getASeller(items.getSellerId().getId());
+		if (wh != null) {
+			items.setSellerId(wh);
 		}
-		Product product = productService.getItem(items.getItemid().getId());
-		if(product != null)
-		{
-			items.setItemid(product);
+		Product product = productService.getItem(items.getProductId().getId());
+		if (product != null) {
+			items.setProductId(product);
 		}
-		if(wh != null && product != null)
-		{
+		if (wh != null && product != null) {
 			gmDao.save(items);
-			if(items.getId() != null && items.getId() > 0 )
-			{
+			if (items.getId() != null && items.getId() > 0) {
 				result = true;
 			}
-			
+
 		}
 		logger.info("saveWarehouseItem end ");
 		return result;
 	}
 
-	public String getAllWarehouseItems(Long warehouseId) {
+	public String getAllSellerCatalog(Long warehouseId) {
 		logger.info("getAllWarehouseItems start ");
 		String result = null;
 		if (warehouseId != null) {
@@ -78,23 +75,23 @@ protected final Logger logger = LoggerFactory.getLogger(SellerServiceImpl.class)
 			if (list != null && !list.isEmpty()) {
 				String geoJsonString = null;
 				for (SellerCatalog item : list) {
-					if (item.getWhid() != null) {
-						if (item.getWhid().getLocation() != null) {
-							geoJsonString = writer.write(item.getWhid().getLocation());
-							item.getWhid().setLocationJson(geoJsonString);
-							item.getWhid().setLocation(null);
+					if (item.getSellerId() != null) {
+						if (item.getSellerId().getLocation() != null) {
+							geoJsonString = writer.write(item.getSellerId().getLocation());
+							item.getSellerId().setLocationJson(geoJsonString);
+							item.getSellerId().setLocation(null);
 						}
-						if (item.getWhid().getServingArea() != null) {
-							geoJsonString = writer.write(item.getWhid().getServingArea());
-							item.getWhid().setServingAreaJson(geoJsonString);
-							item.getWhid().setServingArea(null);
+						if (item.getSellerId().getServingArea() != null) {
+							geoJsonString = writer.write(item.getSellerId().getServingArea());
+							item.getSellerId().setServingAreaJson(geoJsonString);
+							item.getSellerId().setServingArea(null);
 						}
 
 					}
 				}
 				Gson gson = new Gson();
 				result = gson.toJson(list, List.class);
-				
+
 			}
 		}
 
@@ -102,32 +99,46 @@ protected final Logger logger = LoggerFactory.getLogger(SellerServiceImpl.class)
 		return result;
 	}
 
-	public String getItemsPresentInWarehouses(Long items) {
+	public List<Seller> getAllSeller(String product) {
+		logger.info("getAllSeller start");
+		List<Seller> result = null;
+		String sqlQuery = propertyConfigurer.getProperty("GET_PRODUCT_FOR_A_SELLER").replace("#",
+				product.toLowerCase());
+		result = gmDao.find(sqlQuery);
+		if (result.isEmpty()) {
+			logger.info("Not able to find the product in the SellerCatalog");
+		} 
+
+		logger.info("getAllSeller end");
+		return result;
+	}
+
+	public String getProductPresentWithSeller(Long product) {
 		logger.info("getItemsPresentInWarehouses start ");
 		String result = null;
-		if (items != null) {
+		if (product != null) {
 			List<SellerCatalog> list = gmDao.find(propertyConfigurer.getProperty("GET_ALL_WAREHOUSE_FOR_A_ITEM"),
-					items);
+					product);
 			if (list != null && !list.isEmpty()) {
 				String geoJsonString = null;
 				for (SellerCatalog item : list) {
-					if (item.getWhid() != null) {
-						if (item.getWhid().getLocation() != null) {
-							geoJsonString = writer.write(item.getWhid().getLocation());
-							item.getWhid().setLocationJson(geoJsonString);
-							item.getWhid().setLocation(null);
+					if (item.getSellerId() != null) {
+						if (item.getSellerId().getLocation() != null) {
+							geoJsonString = writer.write(item.getSellerId().getLocation());
+							item.getSellerId().setLocationJson(geoJsonString);
+							item.getSellerId().setLocation(null);
 						}
-						if (item.getWhid().getServingArea() != null) {
-							geoJsonString = writer.write(item.getWhid().getServingArea());
-							item.getWhid().setServingAreaJson(geoJsonString);
-							item.getWhid().setServingArea(null);
+						if (item.getSellerId().getServingArea() != null) {
+							geoJsonString = writer.write(item.getSellerId().getServingArea());
+							item.getSellerId().setServingAreaJson(geoJsonString);
+							item.getSellerId().setServingArea(null);
 						}
 
 					}
 				}
 				Gson gson = new Gson();
 				result = gson.toJson(list, List.class);
-				
+
 			}
 		}
 
@@ -135,22 +146,20 @@ protected final Logger logger = LoggerFactory.getLogger(SellerServiceImpl.class)
 		return result;
 	}
 
-	public Boolean deleteWarehouseItem(Long warehouseItemId) {
+	public Boolean deleteSellerCatalog(Long warehouseItemId) {
 		logger.info("deleteWarehouseItem start");
 		Boolean result = false;
-		//GET_A_WAREHOUSE_ITEM_FOR_A_ITEM
-		if(warehouseItemId != null && warehouseItemId > 0)
-		{
+		// GET_A_WAREHOUSE_ITEM_FOR_A_ITEM
+		if (warehouseItemId != null && warehouseItemId > 0) {
 			String sql = propertyConfigurer.getProperty("GET_A_WAREHOUSE_ITEM_FOR_A_ITEM");
-			List<SellerCatalog> list= gmDao.find(sql, warehouseItemId);
-			if(list != null && list.size() > 0)
-			{
+			List<SellerCatalog> list = gmDao.find(sql, warehouseItemId);
+			if (list != null && list.size() > 0) {
 				SellerCatalog temp = list.get(0);
 				gmDao.delete(temp);
 				result = true;
 			}
 		}
-		
+
 		logger.info("deleteWarehouseItem end");
 		return result;
 	}

@@ -32,27 +32,30 @@ public class SellerCatalog implements Serializable  {
 	
 
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="itemid")
-	private Product itemid;
+	@JoinColumn(name="productid")
+	private Product productid;
 	
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="whid")
-	private Seller whid;
+	@JoinColumn(name="sellerid")
+	private Seller sellerid;
 
 
+	@Column(name="price", length=20, precision=4)
+	private Double price;
+	
 	public Long getId() {
 		return id;
 	}
 
 
-	public Product getItemid() {
-		return itemid;
+	public Product getProductId() {
+		return productid;
 	}
 
 
-	public Seller getWhid() {
-		return whid;
+	public Seller getSellerId() {
+		return sellerid;
 	}
 
 
@@ -61,12 +64,22 @@ public class SellerCatalog implements Serializable  {
 	}
 
 
-	public void setItemid(Product itemid) {
-		this.itemid = itemid;
+	public void setProductId(Product itemid) {
+		this.productid = itemid;
 	}
 
 
-	public void setWhid(Seller whid) {
-		this.whid = whid;
+	public void setSellerId(Seller whid) {
+		this.sellerid = whid;
+	}
+
+
+	public Double getPrice() {
+		return price;
+	}
+
+
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 }
