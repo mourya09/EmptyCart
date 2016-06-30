@@ -217,6 +217,7 @@ public class GMDaoImpl implements GMDao {
 				ware.setServingAreaJson(rs.getString("servingArea"));
 				ware.setLocationJson(rs.getString("location"));
 				ware.setFormatted_address(rs.getString("formatted_address"));
+				ware.setStatus(rs.getString("status"));
 				result.add(ware);
 
 			}

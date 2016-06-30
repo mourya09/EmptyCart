@@ -158,7 +158,7 @@ protected final Logger logger = LoggerFactory.getLogger(SellerServiceImpl.class)
  {
 		logger.info("getNearestWareHouse start");
 		String result = null;
-		String sqlQuery = propertyConfigurer.getProperty("GET_ALL_WITHIN_A_CERTAIN_DISTANCE")
+		String sqlQuery = propertyConfigurer.getProperty("GET_ALL_WITHIN_A_CERTAIN_DISTANCE2")
 				.replace("?", warehouse.getLat()).replace("#", warehouse.getLng()).replace("@", warehouse.getPLZ());
 		logger.info("Created Query is " + sqlQuery);
 		try {

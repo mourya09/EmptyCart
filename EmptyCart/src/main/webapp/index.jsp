@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Routing Demo</title>
+    <title>Empty Cart</title>
     <meta name="description" content="">
 
 	<link rel="shortcut icon" href="img/favicon_16.png" type="image/png"/>
@@ -47,7 +47,7 @@
 										</td>
 										<td>
 											<div class="step-description-wrapper">
-												<span class="step-description ng-binding">Search Product</span>
+												<span class="step-description ng-binding">Search Product/Category</span>
 											</div>
 										</td>
 									</tr>
@@ -61,8 +61,10 @@
 									Show all the Sellers which sells the product
 								</p>
 								<div class="">
+									<input type="button" name="setLocation" value="Set Location" onclick="setUserLocation()" ><br>
 									<input type="text" name="text" id="product" value=""  >
-									<input type="button" name="productSearch" value="Search Product" onclick="searchProduct()" >
+									<input type="button" name="productSearch" value="Search" onclick="searchProduct()" ><br>
+									<input type="checkbox" name="showSellerServingArea" id="showSellerServingArea" >&nbsp; Show Seller's Coverage Area
 								</div>
 							</div>
 						</div>

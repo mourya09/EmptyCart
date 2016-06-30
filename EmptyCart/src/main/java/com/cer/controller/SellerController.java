@@ -95,10 +95,33 @@ public class SellerController {
 	
 	@RequestMapping(value = "/getSellerWhoSellsTheProduct"/*, method = RequestMethod.POST, headers = "application/x-www-form-urlencoded; charset=UTF-8"*/)
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	private @ResponseBody String getSellerWhoSellsTheProduct(@ModelAttribute Product product, BindingResult bindingresult,
+	private @ResponseBody String getSellerWhoSellsTheProduct(@ModelAttribute Seller seller, BindingResult bindingresult,
 			HttpServletRequest request) {
 		String result = null;
 		logger.info("getSellerWhoSellsTheProduct Start");
+		  List<FieldError> errors = bindingresult.getFieldErrors();
+		    for (FieldError error : errors ) {
+		    	logger.info(error.getObjectName() + " - " + error.getDefaultMessage());
+		    }
+		
+		if(seller.getName() == null || seller.getName().equalsIgnoreCase(""))
+		{
+			seller.setName(request.getParameter("name"));
+		}
+		List<Seller> sellerList = sellerCatalogService.getAllSeller(seller.getName(), seller.getLat(),seller.getLng());
+		if(!sellerList.isEmpty()){
+			Gson gson = new Gson();
+			result = gson.toJson(sellerList, List.class);
+		}
+		logger.info("getSellerWhoSellsTheProduct End");
+		return result;
+	}
+	@RequestMapping(value = "/getSellerWhoSellsTheProductPart2"/*, method = RequestMethod.POST, headers = "application/x-www-form-urlencoded; charset=UTF-8"*/)
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	private @ResponseBody String getSellerWhoSellsTheProductPart2(@ModelAttribute Product product, BindingResult bindingresult,
+			HttpServletRequest request) {
+		String result = null;
+		logger.info("getSellerWhoSellsTheProductPart2 Start");
 		  List<FieldError> errors = bindingresult.getFieldErrors();
 		    for (FieldError error : errors ) {
 		    	logger.info(error.getObjectName() + " - " + error.getDefaultMessage());
@@ -108,12 +131,9 @@ public class SellerController {
 		{
 			product.setName(request.getParameter("name"));
 		}
-		List<Seller> sellerList = sellerCatalogService.getAllSeller(product.getName());
-		if(!sellerList.isEmpty()){
-			Gson gson = new Gson();
-			result = gson.toJson(sellerList, List.class);
-		}
-		logger.info("getSellerWhoSellsTheProduct End");
+		result = sellerCatalogService.getAllSellerCoverage(product.getName());
+		
+		logger.info("getSellerWhoSellsTheProductPart2 End");
 		return result;
 	}
 	

@@ -1,6 +1,8 @@
 var GEOAPIS_V1 = GEOAPIS_V1 || {};
 var ALL_SELLERS= null;
 var isTWuseCase = false;
+var setLocationEvent=null;
+var setLocationPosition=null;
 GEOAPIS_V1.apiDemo = function(){
 	this.apiAddress = window.location.origin;
 	this.map;
@@ -85,7 +87,7 @@ GEOAPIS_V1.apiDemo.prototype.renderMap = function(){
 		disableZooming: false
 	} 
 	that.map = new Microsoft.Maps.Map(document.getElementById("apiDemo-sd-map"), mapOptions);
-	
+	Microsoft.Maps.loadModule('Microsoft.Maps.AdvancedShapes');
 	var loc = new Microsoft.Maps.Location(28.548764, 77.192652);
 	that.map.setView({center: loc});
 };
@@ -292,13 +294,34 @@ GEOAPIS_V1.apiDemo.prototype.showCustomers = function(){
 	}
 
 };
+function setUserLocation()
+{
+	setLocationEvent= Microsoft.Maps.Events.addHandler(GSDS.map, 'click',getLatlng ); 
+}
+function getLatlng(e)
+{
+	if (e.targetType == "map") {
+           var point = new Microsoft.Maps.Point(e.getX(), e.getY());
+           var locTemp = e.target.tryPixelToLocation(point);
+           var location = new Microsoft.Maps.Location(locTemp.latitude, locTemp.longitude);
+        setLocationPosition = location;
+
+
+           var pin = new Microsoft.Maps.Pushpin(location, {'draggable': false});
+             
+             GSDS.map.entities.push(pin);
+             Microsoft.Maps.Events.removeHandler(setLocationEvent );
+
+        }              
+}
+
 function searchProduct()
 {
 	
 	//var dataToSearch =$.param({name: $('#product').val()}) ;
 	var dataToSearch =
 	new Object();
-	dataToSearch = {name: $('#product').val()} ;
+	dataToSearch = {name: $('#product').val(),lng:setLocationPosition.latitude,lat:setLocationPosition.longitude} ;
 	//alert(dataToSearch);
 	$.ajax({
 		url: 'getSellerWhoSellsTheProduct.html',
@@ -309,20 +332,27 @@ function searchProduct()
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 		success: function(data){
 			ALL_SELLERS = data;
-			var loc = new Microsoft.Maps.Location(parseFloat(ALL_SELLERS[0].lat,10),parseFloat( ALL_SELLERS[0].lng,10));
+			for(var _key in ALL_SELLERS)
+			{
+				ALL_SELLERS[_key].locationJson = $.parseJSON(ALL_SELLERS[_key].locationJson);
+				ALL_SELLERS[_key].servingAreaJson = $.parseJSON(ALL_SELLERS[_key].servingAreaJson);
+			}
+			var loc = new Microsoft.Maps.Location(parseFloat(ALL_SELLERS[0].locationJson.coordinates[1],10),parseFloat( ALL_SELLERS[0].locationJson.coordinates[0],10));
 			lngArray=[];
 			latArray=[];
-			ALL_SELLERS.sort(function(a,b){
-				return (parseFloat(a.lng,10) -parseFloat(b.lng,10))*(parseFloat(a.lat,10) - parseFloat(b.lat,10));
-			});
+			
 			GSDS.map.entities.clear();
 			for(var _key in ALL_SELLERS)
 			{
-				latArray.push(parseFloat(ALL_SELLERS[_key].lat,10));
-				lngArray.push(parseFloat( ALL_SELLERS[_key].lng,10));
+				latArray.push(parseFloat(ALL_SELLERS[_key].locationJson.coordinates[1],10));
+				lngArray.push(parseFloat( ALL_SELLERS[_key].locationJson.coordinates[0],10));
 				// 
-				var loc = new Microsoft.Maps.Location(parseFloat(ALL_SELLERS[_key].lat,10), parseFloat( ALL_SELLERS[_key].lng,10));
+				var loc = new Microsoft.Maps.Location(parseFloat(ALL_SELLERS[_key].locationJson.coordinates[1],10), parseFloat( ALL_SELLERS[_key].locationJson.coordinates[0],10));
 				var pushpinOptions = {icon: 'images/location_icon.png', width: 50, height: 50}; 
+				if(ALL_SELLERS[_key].status == "Not Available")
+				{
+					pushpinOptions = {icon: 'images/location_icon1.png', width: 50, height: 50}; 
+				}
 				var pushpin= new Microsoft.Maps.Pushpin(loc, pushpinOptions);
 				GSDS.map.entities.push(pushpin);
 				
@@ -337,12 +367,93 @@ function searchProduct()
 				];
 				
 				var initialViewBounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(locationArr[0].latitude,locationArr[0].longitude), new Microsoft.Maps.Location(locationArr[1].latitude,locationArr[1].longitude));
-			
+			 var pin = new Microsoft.Maps.Pushpin(setLocationPosition, {'draggable': false});             
+             GSDS.map.entities.push(pin);
 			GSDS.map.setView({bounds: initialViewBounds});
-			//GSDS.map.setView({center: loc});
+			if($('#showSellerServingArea').is(':checked'))
+			{
+				searchPart2(dataToSearch);
+			}
+			GSDS.map.setView({center: setLocationPosition});
 		}
 	});
 	
+}
+
+function searchPart2(dataToSearch)
+{
+	dataToSearch = {name: $('#product').val()} ;
+	$.ajax({
+		url: 'getSellerWhoSellsTheProductPart2.html',
+		data: dataToSearch,
+		type:'POST',
+		cache: false,
+		dataType : "json",
+		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+		success: function(data){
+			toRender = new Array();
+			for(var key in data.Output)
+			{
+				if(typeof data.Output[key] != 'undefined' && data.Output[key] != null )
+				{
+					toRender.push($.parseJSON(data.Output[key].Coverage_GeoJSON));
+				}
+			}
+			/* var ring = [];
+			var innerring=[];
+			for(var key in toRender)
+			{
+				latArray=[];
+				lngArray = [];
+				for(var kkey in toRender[key].coordinates[0])
+				{
+					ring.push(new Microsoft.Maps.Location(toRender[key].coordinates[0][kkey][0],toRender[key].coordinates[0][kkey][1]));
+					latArray.push(toRender[key].coordinates[0][kkey][0]);
+					lngArray.push(toRender[key].coordinates[0][kkey][1]);
+				}
+				latArray.sort(function(a,b){
+				return parseFloat(a,10) - parseFloat(b,10);
+			});
+			lngArray.sort(function(a,b){
+				return parseFloat(a,10) - parseFloat(b,10);
+			});
+			new Microsoft.Maps.Location(locationArr[0].latitude,locationArr[0].longitude)
+				innerring.push(new Microsoft.Maps.Polygon([ring]));
+				ring = [];
+			} */
+			
+			Microsoft.Maps.loadModule('Microsoft.Maps.GeoJson', function () {
+
+            //Parse the GeoJson object into a Bing Maps shape.
+			 var myGeoJson = {
+            "type": "Polygon",
+            "coordinates": [[
+                    [78.12901, 27.64178],
+                    [79.12901, 28.64226],
+                    [78.12771, 29.64226],
+                    [79.12771, 28.64178],
+                    [78.12901, 27.64178]
+            ]]
+        };
+            var shape = Microsoft.Maps.GeoJson.read(myGeoJson, {
+                polygonOptions: {
+                    fillColor: 'rgba(255,0,0,0.5)',
+                    strokeColor: 'white',
+                    strokeThickness: 5
+                }
+            });
+
+            //Add the shape to the map.
+             GSDS.map.entities.push(shape);
+			
+        });
+			
+			 //var polygon = new Microsoft.Maps.Polygon([innerring]);
+			
+			// GSDS.map.entities.push(innerring);
+			//GSDS.map.setView({center: loc});
+		}
+	});
 }
 GEOAPIS_V1.apiDemo.prototype.showBranches = function(){
  	var that = this;

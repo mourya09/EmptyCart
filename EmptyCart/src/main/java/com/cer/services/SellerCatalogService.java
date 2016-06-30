@@ -9,7 +9,8 @@ public interface SellerCatalogService {
 	public Boolean saveSellerCatalog(SellerCatalog sellerCatalog);
 	public String getAllSellerCatalog(Long sellerId);
 	public String getProductPresentWithSeller(Long product);
-	public List<Seller> getAllSeller(String product);
+	public List<Seller> getAllSeller(String product, String lat, String lng);
+	public String getAllSellerCoverage(String product );
 	public Boolean deleteSellerCatalog(Long sellerCatalog);
 	
 	

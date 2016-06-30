@@ -1,8 +1,14 @@
 package com.cer.services.impl;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,12 +105,17 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 		return result;
 	}
 
-	public List<Seller> getAllSeller(String product) {
+	public List<Seller> getAllSeller(String product, String lat, String lng) {
 		logger.info("getAllSeller start");
 		List<Seller> result = null;
-		String sqlQuery = propertyConfigurer.getProperty("GET_PRODUCT_FOR_A_SELLER").replace("#",
-				product.toLowerCase());
-		result = gmDao.find(sqlQuery);
+		String sqlQuery = propertyConfigurer.getProperty("GET_ALL_WITHIN_A_CERTAIN_DISTANCE2")
+				.replaceAll("#", lat).replaceAll("&", lng).replaceAll("@", product.toLowerCase());
+		try {
+			result = gmDao.nearestWarehouse(sqlQuery);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (result.isEmpty()) {
 			logger.info("Not able to find the product in the SellerCatalog");
 		} 
@@ -163,5 +174,41 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 		logger.info("deleteWarehouseItem end");
 		return result;
 	}
+	public String getAllSellerCoverage(String product )
+ {
+		logger.info("getAllSellerCoverage Start");
+		String result = null;
+		String urlSearch = propertyConfigurer.getProperty("GET_ALL_SELLERS_FROM_ROUTING").replace("$", "=").replace("#",
+				product);
+		logger.info("URL to be hit is " + urlSearch);
+		HttpClient client = new HttpClient();
+		client.getParams().setAuthenticationPreemptive(true);
+		Credentials defaultcreds = new UsernamePasswordCredentials(propertyConfigurer.getProperty("ROUTE_USERNAME"),
+				propertyConfigurer.getProperty("ROUTE_PASSWORD"));
 
+		client.getState().setCredentials(AuthScope.ANY, defaultcreds);
+
+		HttpMethod get = new GetMethod(urlSearch);
+		get.setDoAuthentication(true);
+		try {
+			// execute the GET
+			int status = client.executeMethod(get);
+
+			// print the status and response
+			//System.out.println(status + "\n" + get.getResponseBodyAsString());
+			result = get.getResponseBodyAsString();
+
+		}catch(Exception ex){
+			ex.printStackTrace();
+		} finally {
+			// release any connection resources used by the method
+			get.releaseConnection();
+		}
+
+		logger.info("Response obtained" + result);
+		logger.info("getAllSellerCoverage End");
+		return result;
+	}
+	
+	
 }

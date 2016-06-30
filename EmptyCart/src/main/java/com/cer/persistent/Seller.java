@@ -92,6 +92,10 @@ public class Seller implements Serializable {
 	private String servingAreaJson;
 	
 	@Transient
+	private String status;
+	
+	
+	@Transient
 	private String locationJson;
 	
 	@Column(name="country")
@@ -340,6 +344,16 @@ public class Seller implements Serializable {
 
 	public void setFormatted_address(String formatted_address) {
 		this.formatted_address = formatted_address;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 
