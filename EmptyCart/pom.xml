@@ -20,6 +20,7 @@
 		<jstl-version>1.2</jstl-version>
 		<log4j.version>1.2.16</log4j.version>
 		<jackson.mapper.version>1.4.2</jackson.mapper.version>
+		<mahout.version>0.12.2</mahout.version>
 	</properties>
 	<!-- Specifying the Dependencies -->
 	<dependencies>
@@ -194,6 +195,26 @@
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
 		</dependency>
+
+		<!-- Machine Learning Start -->
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-core</artifactId>
+			<version>0.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-math</artifactId>
+			<version>${mahout.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-integration</artifactId>
+			<version>${mahout.version}</version>
+		</dependency>
+		<!-- Machine Learning End -->
 	</dependencies>
 
 	<build>

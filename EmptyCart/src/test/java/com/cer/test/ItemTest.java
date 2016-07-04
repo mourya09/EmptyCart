@@ -67,7 +67,7 @@ public class ItemTest {
 	public void getProductTest()
 	{
 		logger.info("getProductTest start ");
-		List<Seller> product = sellerCatalogService.getAllSeller("Tuffan");
+		List<Seller> product = sellerCatalogService.getAllSeller("Tuffan","77.28","28.33");
 		Assert.assertNotNull(product);
 		logger.info("getProductTest end ");
 	}
