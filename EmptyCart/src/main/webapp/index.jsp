@@ -46,8 +46,8 @@
 											<span  class="step-number ng-binding">1</span>
 										</td>
 										<td>
-											<div class="step-description-wrapper">
-												<span class="step-description ng-binding">Search Product/Category</span>
+											<div class="step-description-wrapper"  onclick="setUserLocation()">
+												<span class="step-description ng-binding">Customer Location</span>
 											</div>
 										</td>
 									</tr>
@@ -58,47 +58,18 @@
 						<div id="nav_0" class="nav-section-body-wrapper in">
 							<div class="nav-section-body">
 								<p>
-									Show all the Sellers which sells the product
+									Click on the map to set customer's location.
 								</p>
 								<div class="">
-									<input type="button" name="setLocation" value="Set Location" onclick="setUserLocation()" ><br>
+									<!-- <input type="button" name="setLocation" value="Set Location" onclick="setUserLocation()" ><br> 
 									<input type="text" name="text" id="product" value=""  >
 									<input type="button" name="productSearch" value="Search" onclick="searchProduct()" ><br>
-									<input type="checkbox" name="showSellerServingArea" id="showSellerServingArea" >&nbsp; Show Seller's Coverage Area
+									 <input type="checkbox" name="showSellerServingArea" id="showSellerServingArea" >&nbsp; Show Seller's Coverage Area -->
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="panel nav-section ng-scope">
-						<div class="nav-section-header" data-toggle="collapse" data-parent="#navigation-wrapper" data-target="#nav_1" >
-							<table>
-								<tbody>
-									<tr>
-										<td><img  src="img/left-arrow-grey.png"></td>
-										<td>
-											<span  class="step-number ng-binding">2</span>
-										</td>
-										<td>
-											<div class="step-description-wrapper">
-												<span class="step-description ng-binding">Show Customer Locations</span>
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div id="nav_1" class="collapse nav-section-body-wrapper">
-							<div class="nav-section-body">
-								<p>
-									Display addresses on map where I need to visit customer.
-								</p>
-								<div class="check_box_inpt">
-									<input type="checkbox" name="checkbox" id="myDeliveries" value="value" unchecked disabled>
-									<label for="myDeliveries">Show my targeted customer locations for today</label>
-								</div> 
-							</div>
-						</div>
-					</div>
+					
 					<div class="panel nav-section ng-scope">
 						<div class="nav-section-header" data-toggle="collapse" data-parent="#navigation-wrapper" data-target="#nav_2" >
 							<table>
@@ -106,11 +77,11 @@
 									<tr>
 										<td><img  src="img/left-arrow-grey.png"></td>
 										<td>
-											<span class="step-number ng-binding">3</span>
+											<span class="step-number ng-binding">2</span>
 										</td>
 										<td>
 											<div class="step-description-wrapper">
-												<span class="step-description ng-binding">Show Visit Route</span>
+												<span class="step-description ng-binding">Search Product/Category</span>
 											</div>
 										</td>
 									</tr>
@@ -120,6 +91,17 @@
 						<div id="nav_2" class="collapse nav-section-body-wrapper">
 							<div class="nav-section-body">
 								<p>
+									Click on the map to set customer's location.
+								</p>
+								<div class="">
+									<!-- <input type="button" name="setLocation" value="Set Location" onclick="setUserLocation()" ><br> -->
+									<input type="text" name="text" id="product" value="" placeholder="Category" >
+									<input type="text" name="text" id="product2" value=""  placeholder="Product" >
+									<input type="button" name="productSearch" value="Search" onclick="searchProduct()" ><br>
+									
+									<!-- <input type="checkbox" name="showSellerServingArea" id="showSellerServingArea" >&nbsp; Show Seller's Coverage Area -->
+								</div>
+								<!-- <p>
 									Display visit route on the map.
 								</p>
                            		<div class="check_box_inpt">
@@ -140,12 +122,41 @@
 									</select>
 									<label id = 'lblRoute2' style="display:none;font-weight: 500;color: #007ac2;"></label>
 								</div>
-
+								-->
 								<!-- <div id="directionDetails" style="display:none;"></div> -->
 							</div>
 						</div>
 					</div>
-					
+					<div class="panel nav-section ng-scope">
+						<div class="nav-section-header" data-toggle="collapse" data-parent="#navigation-wrapper" data-target="#nav_1" >
+							<table>
+								<tbody>
+									<tr>
+										<td><img  src="img/left-arrow-grey.png"></td>
+										<td>
+											<span  class="step-number ng-binding">3</span>
+										</td>
+										<td>
+											<div class="step-description-wrapper" onclick="showSellerGeofence()">
+												<span class="step-description ng-binding">Sellers & Coverage</span>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div id="nav_1" class="collapse nav-section-body-wrapper">
+							<div class="nav-section-body">
+								<p>
+									Display addresses on map where I need to visit customer.
+								</p>
+								<div class="check_box_inpt">
+									<input type="checkbox" name="checkbox" id="myDeliveries" value="value" unchecked disabled>
+									<label for="myDeliveries">Show my targeted customer locations for today</label>
+								</div> 
+							</div>
+						</div>
+					</div>
 					<div class="panel nav-section ng-scope">
 						<div class="nav-section-header" data-toggle="collapse" data-parent="#navigation-wrapper" data-target="#nav_3" >
 							<table>
@@ -157,7 +168,7 @@
 										</td>
 										<td>
 											<div class="step-description-wrapper">
-												<span class="step-description ng-binding">Show Visit Route (Time Window)</span>
+												<span class="step-description ng-binding">Tag Customer & Push Offer</span>
 											</div>
 										</td>
 									</tr>
