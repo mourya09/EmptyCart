@@ -3,32 +3,61 @@
  */
 package com.cer.util;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Properties;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import java.util.Properties;
+
 /**
  * @author NEX6UYU
  *
  */
 public class PropertyConfigurer extends PropertyPlaceholderConfigurer {
 	/**
-     * The properties used for BeanFactory post-processing.
-     */
-    private Properties props;
+	 * The properties used for BeanFactory post-processing.
+	 */
+	private Properties props;
 
-	/* 
-	 * @see org.springframework.beans.factory.config.PropertyPlaceholderConfigurer#processProperties(org.springframework.beans.factory.config.ConfigurableListableBeanFactory, java.util.Properties)
+	/*
+	 * @see
+	 * org.springframework.beans.factory.config.PropertyPlaceholderConfigurer#
+	 * processProperties(org.springframework.beans.factory.config.
+	 * ConfigurableListableBeanFactory, java.util.Properties)
 	 */
 	@Override
-	protected void processProperties(
-			ConfigurableListableBeanFactory beanFactoryToProcess,
-			Properties props) throws BeansException {
-        this.props = props;
+	protected void processProperties(ConfigurableListableBeanFactory beanFactoryToProcess, Properties props)
+			throws BeansException {
+		this.props = props;
 		super.processProperties(beanFactoryToProcess, props);
 	}
 
-	public String getProperty(String propertyKey){
+	public String getProperty(String propertyKey) {
 		return props.getProperty(propertyKey);
+	}
+
+	public static Double parseDouble(String input) {
+		Double result = null;
+		try {
+			if (input.contains(",")) {
+				DecimalFormat df = new DecimalFormat();
+				DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+				symbols.setDecimalSeparator(',');
+				symbols.setGroupingSeparator(' ');
+				df.setDecimalFormatSymbols(symbols);
+				Number nf = df.parse(input);//.doubleValue();
+				result = nf.doubleValue();
+
+			} else {
+				result = Double.parseDouble(input);
+
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return result;
 	}
 }

@@ -131,7 +131,7 @@ public class SellerController {
 		{
 			product.setName(request.getParameter("name"));
 		}
-		result = sellerCatalogService.getAllSellerCoverage(product.getName());
+		result = sellerCatalogService.getAllSellerCoverage(product);
 		
 		logger.info("getSellerWhoSellsTheProductPart2 End");
 		return result;

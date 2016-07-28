@@ -3,6 +3,10 @@ var ALL_SELLERS= null;
 var isTWuseCase = false;
 var setLocationEvent=null;
 var setLocationPosition=null;
+var sellerlocation = null;
+var insideSeller = [];
+var	outsideSeller = [];
+
 GEOAPIS_V1.apiDemo = function(){
 	this.apiAddress = window.location.origin;
 	this.map;
@@ -88,7 +92,7 @@ GEOAPIS_V1.apiDemo.prototype.renderMap = function(){
 	} 
 	that.map = new Microsoft.Maps.Map(document.getElementById("apiDemo-sd-map"), mapOptions);
 	Microsoft.Maps.loadModule('Microsoft.Maps.AdvancedShapes');
-	var loc = new Microsoft.Maps.Location(28.548764, 77.192652);
+	var loc = new Microsoft.Maps.Location(28.65019619154841, 77.23213411669923);
 	that.map.setView({center: loc});
 };
 
@@ -382,6 +386,7 @@ function searchProduct()
 		}
 	});*/
 	searchPart2(dataToSearch);
+	//searchData3();
 	
 }
 function showSellerGeofence()
@@ -400,10 +405,12 @@ function showSellerGeofence()
 						lineVertices[i] = new Microsoft.Maps.Location(locationArr[i].latitude, locationArr[i].longitude);
 						boundlocation.push(locationArr[i]);
 					}
+					var val=Math.floor((Math.random() * 250) + 1);
+					var val1=Math.floor((Math.random() * 250) + 1);
 					var options = {
-									fillColor: new Microsoft.Maps.Color(255, 0, 255, 0),
+									fillColor: new Microsoft.Maps.Color(val, 0, val1, 0),
 									//fillColor: colorsArr[i],
-									strokeColor: new Microsoft.Maps.Color(255, 0, 255, 0),
+									strokeColor: new Microsoft.Maps.Color(val, 0, val1, 0),
 									strokeThickness: 3
 								};
 								
@@ -425,11 +432,85 @@ function showSellerGeofence()
 					
 			GSDS.map.setView( {zoom:newZoom});	
 }
+function searchData3()
+{
+	
+			toRender = new Array();
+			insideSeller = [];
+			outsideSeller = [];
+			sellerlocation = new Array();
+			for(var key in sampleData.Output)
+			{
+				if(typeof sampleData.Output[key] != 'undefined' && sampleData.Output[key] != null )
+				{
+					//isJsonConverted = true;
+					sampleData.Output[key].COVERAGE = $.parseJSON(sampleData.Output[key].COVERAGE);
+					toRender.push(sampleData.Output[key].COVERAGE);
+					sampleData.Output[key].Latitude = parseFloat(sampleData.Output[key].Latitude);
+					sampleData.Output[key].Longitude=parseFloat(sampleData.Output[key].Longitude)
+					sellerlocation.push({latitude:sampleData.Output[key].Latitude,longitude:sampleData.Output[key].Longitude});
+					if(sampleData.Output[key].TAG == "INSIDE"){
+						insideSeller.push(sampleData.Output[key]);
+					
+					}else{
+						
+						outsideSeller.push(sampleData.Output[key]);
+					}
+				}
+				
+				
+				
+				
+			}
+				//var pushpinOptions = {'icon': 'images/location_icon.png', 'width': 50, 'height': 50,'draggable': false};
+				var pushpinOptions = {'icon': 'images/location_icon.png', width: 50, height: 50};
+				//var pushpinOptions1 = {'icon': 'images/location_icon1.png', width: 50, height: 50};
+				var pushpinOptions1 = {'icon': 'images/location_icon.png', width: 50, height: 50};
+				//var pushpin2= new Microsoft.Maps.Pushpin(sellerlocation[0], pushpinOptions);
+				//var pushpin1= new Microsoft.Maps.Pushpin(setLocationPosition, pushpinOptions);
+				//GSDS.map.entities.push(pushpin1);									
+				//GSDS.map.entities.push(pushpin2);
+								
+				//displayUserLocation();
+				var boundlocation =[];
+				for(var i=0; i< insideSeller.length; i++)
+				{ 
+					//boundlocation.push(insideSeller[i]);
+					boundlocation.push({longitude:insideSeller[i].Longitude,latitude:insideSeller[i].Latitude});
+					GSDS.map.entities.push(new Microsoft.Maps.Pushpin({longitude:insideSeller[i].Longitude,latitude:insideSeller[i].Latitude}, pushpinOptions));
+				}
+				for(var i=0; outsideSeller != null &&outsideSeller.length > 0 && i< outsideSeller.length; i++)
+				{ 
+					boundlocation.push(outsideSeller[i]);
+					GSDS.map.entities.push(new Microsoft.Maps.Pushpin({longitude:outsideSeller[i].Longitude,latitude:outsideSeller[i].Latitude}, pushpinOptions1));
+				}
+				//GSDS.map.entities.push({latitude:setLocationPosition.latitude,longitude:setLocationPosition.longitude}, {'draggable': false});
+				//boundlocation.push(setLocationPosition);
+				
+				
+				//boundlocation.push({longitude:76.9780752788086,
+				//		latitude:29.02612735020869});
+				//boundlocation.push({longitude:77.6592276225586,
+				//	latitude:29.710691226198932});
+			var  params = {
+						locations: boundlocation, // An array of locations, or can use bounds: boundsObject
+						mapWidth: window.innerWidth, // Width of your map div in pixels
+						mapHeight: window.innerHeight, // Height of your map div in pixels
+						buffer: 0 // How many pixels to add as a buffer
+					};
+					
+			var newZoom = getZoom(GSDS.map, params) - 1;
+					
+			GSDS.map.setView( {zoom:newZoom});	
+}
 function searchPart2(dataToSearch)
 {
-	dataToSearch = {name: $('#product').val()} ;
+	dataToSearch = {name: $('#product').val(),lattitude:setLocationPosition.latitude , longitude:setLocationPosition.longitude} ;
+	dataToSearch = $.param(dataToSearch);
+	
 	$.ajax({
 		url: 'getSellerWhoSellsTheProductPart2.html',
+		//url: 'js/sample.js',
 		data: dataToSearch,
 		type:'POST',
 		cache: false,
@@ -437,37 +518,64 @@ function searchPart2(dataToSearch)
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 		success: function(data){
 			toRender = new Array();
+			insideSeller = [];
+			outsideSeller = [];
+			sellerlocation = new Array();
+			GSDS.clearMap();
 			for(var key in data.Output)
 			{
-				if(typeof data.Output[key] != 'undefined' && data.Output[key] != null )
+				if(typeof data.Output[key].Status != 'undefined' && data.Output[key].Status == 'F')
 				{
-					toRender.push($.parseJSON(data.Output[key].Coverage_GeoJSON));
+					continue;
 				}
+				if(typeof data.Output[key] != 'undefined' && data.Output[key] != null  )
+				{
+					data.Output[key].COVERAGE = $.parseJSON(data.Output[key].COVERAGE);
+					toRender.push(data.Output[key].COVERAGE);
+					data.Output[key].Latitude = parseFloat(data.Output[key].Latitude);
+					data.Output[key].Longitude=parseFloat(data.Output[key].Longitude)
+					sellerlocation.push({latitude:data.Output[key].Latitude,longitude:data.Output[key].Longitude});
+					if(data.Output[key].TAG == "INSIDE"){
+						insideSeller.push(data.Output[key]);
+					
+					}else{
+						
+						outsideSeller.push(data.Output[key]);
+					}
+				}
+				
+				
+				
+				
 			}
-			
-			
-						   loc1 =  new Microsoft.Maps.Location({latitude :76.9780752788086,
-				longitude:29.02612735020869});
-
-
-				loc2=  new Microsoft.Maps.Location({latitude:77.6592276225586,
-				 longitude:29.710691226198932});
-
-
-				var pushpinOptions = {icon: 'images/location_icon.png', width: 50, height: 50};
-				var pushpin1= new Microsoft.Maps.Pushpin(loc1, pushpinOptions);
-								GSDS.map.entities.push(pushpin1);
+				//var pushpinOptions = {'icon': 'images/location_icon.png', 'width': 50, 'height': 50,'draggable': false};
+				var pushpinOptions = {'icon': 'images/location_icon.png', width: 50, height: 50};
+				var pushpinOptions1 = {'icon': 'images/location_icon1.png', width: 50, height: 50};
+				//var pushpin2= new Microsoft.Maps.Pushpin(sellerlocation[0], pushpinOptions);
+				//var pushpin1= new Microsoft.Maps.Pushpin(setLocationPosition, pushpinOptions);
+				//GSDS.map.entities.push(pushpin1);									
+				//GSDS.map.entities.push(pushpin2);
 								
-								var pushpin2= new Microsoft.Maps.Pushpin(loc2, pushpinOptions);
-								GSDS.map.entities.push(pushpin2);
-								
-				displayUserLocation();
-				var boundlocation = [];
+				//displayUserLocation();
+				var boundlocation =[];
+				for(var i=0; i< sellerlocation.length; i++)
+				{ 
+					boundlocation.push(sellerlocation[i]);
+					GSDS.map.entities.push(new Microsoft.Maps.Pushpin(sellerlocation[i], pushpinOptions));
+				}
+				for(var i=0; outsideSeller != null && i< outsideSeller.length; i++)
+				{ 
+					boundlocation.push(outsideSeller[i]);
+					GSDS.map.entities.push(new Microsoft.Maps.Pushpin(outsideSeller[i], pushpinOptions1));
+				}
+				//GSDS.map.entities.push({latitude:setLocationPosition.latitude,longitude:setLocationPosition.longitude}, {'draggable': false});
 				boundlocation.push(setLocationPosition);
-				boundlocation.push({longitude:76.9780752788086,
-						latitude:29.02612735020869});
-				boundlocation.push({longitude:77.6592276225586,
-					latitude:29.710691226198932});
+				
+				
+				//boundlocation.push({longitude:76.9780752788086,
+				//		latitude:29.02612735020869});
+				//boundlocation.push({longitude:77.6592276225586,
+				//	latitude:29.710691226198932});
 			var  params = {
 						locations: boundlocation, // An array of locations, or can use bounds: boundsObject
 						mapWidth: window.innerWidth, // Width of your map div in pixels
@@ -1393,58 +1501,6 @@ $('#nav_3').on('show.bs.collapse', function () {
 
 });
 
-function getZoom(map, params) {  // params are: locations, bounds, mapWidth, mapHeight, buffer
-
-	var maxLat = -85,
-		minLat = 85,
-		maxLon = -180,
-		minLon = 180,
-		zoom1 = 0,
-		zoom2 = 0,
-		i;
-
-	// If there are no params, then just get the zoom level of the passed map.
-	if (!params) {
-		return map.getZoom();
-	}
-
-	// If we have a locations array, the we ned to get the MBR
-	if (params.locations) {     // A list of location objects, we need to get MBR
-		for (i = 0; i < params.locations.length; i++) {
-			if (params.locations[i].latitude > maxLat) {
-				maxLat = params.locations[i].latitude;
-			}
-			if (params.locations[i].latitude < minLat) {
-				minLat = params.locations[i].latitude;
-			}
-			if (params.locations[i].longitude > maxLon) {
-				maxLon = params.locations[i].longitude;
-			}
-			if (params.locations[i].longitude < minLon) {
-				minLon = params.locations[i].longitude;
-			}
-		}
-	} else if (params.bounds) {     // if we have a bounds object, then it is an MBR already
-		minLat = bounds.getSouth();
-		maxLat = bounds.getNorth();
-		minLng = bounds.getEast();
-		maxLng = counds.getWest();
-	} else {
-		return map.getZoom();
-	}
-
-	//Determine the best zoom level based on the map scale and bounding coordinate information
-	if (maxLon != minLon && maxLat != minLat)
-	{
-		//best zoom level based on map width
-		zoom1 = Math.log(360.0 / 256.0 * (params.mapWidth - 2 * params.buffer) / (maxLon - minLon)) / Math.log(2);
-		//best zoom level based on map height
-		zoom2 = Math.log(180.0 / 256.0 * (params.mapHeight - 2 * params.buffer) / (maxLat - minLat)) / Math.log(2);
-	}
-
-	//use the most zoomed out of the two zoom levels
-	return (zoom1 < zoom2) ? zoom1 : zoom2;
-}
 
 function displayInfobox(e){
 var pushpinFrameHTML = '<div class="infobox"><div class="modal-header"><button type="button" class="close infobox_close"><span aria-hidden="true">×</span></button><h4 class="modal-title">'+e.target.infoHeader+'</h4></div><div class="infobox_content">'+e.target.Description+'</div></div><div class="infobox_pointer"><img src="images/pointer_shadow.png"></div>';
@@ -1766,6 +1822,8 @@ function getZoom(map, params) {  // params are: locations, bounds, mapWidth, map
 		zoom1 = Math.log(360.0 / 256.0 * (params.mapWidth - 2 * params.buffer) / (maxLon - minLon)) / Math.log(2);
 		//best zoom level based on map height
 		zoom2 = Math.log(180.0 / 256.0 * (params.mapHeight - 2 * params.buffer) / (maxLat - minLat)) / Math.log(2);
+	}else{
+		return map.getZoom();
 	}
 
 	//use the most zoomed out of the two zoom levels

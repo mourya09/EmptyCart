@@ -4,7 +4,7 @@
 package com.cer.persistent;
 
 import java.io.Serializable;
-
+import javax.persistence.Transient;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -87,7 +87,14 @@ public class Product   implements Serializable{
 
 	@Column(name="extension")
 	private String extension;
+	
+	
+	@Transient
+	private String lattitude;
 
+
+	@Transient
+	private String longitude;
 
 	public Long getId() {
 		return id;
@@ -239,5 +246,21 @@ public class Product   implements Serializable{
 
 	public void setExtension(String extension) {
 		this.extension = extension;
+	}
+
+	public String getLattitude() {
+		return lattitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLattitude(String lattitude) {
+		this.lattitude = lattitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 }

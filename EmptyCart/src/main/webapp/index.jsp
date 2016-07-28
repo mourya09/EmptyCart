@@ -20,6 +20,7 @@
 	<script charset="UTF-8" type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
 	<script type="text/javascript" src="js/ulDemo.js"></script>
 	<script type="text/javascript" src="js/bootbox.js"></script>
+	<script type="text/javascript" src="js/sample.js"> </script>
 
 	<body oncontextmenu="return false">
 		<div class="page-header">
@@ -147,13 +148,13 @@
 						</div>
 						<div id="nav_1" class="collapse nav-section-body-wrapper">
 							<div class="nav-section-body">
-								<p>
+								<!-- <p>
 									Display addresses on map where I need to visit customer.
 								</p>
 								<div class="check_box_inpt">
 									<input type="checkbox" name="checkbox" id="myDeliveries" value="value" unchecked disabled>
 									<label for="myDeliveries">Show my targeted customer locations for today</label>
-								</div> 
+								</div> -->
 							</div>
 						</div>
 					</div>

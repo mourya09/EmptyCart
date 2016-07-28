@@ -1,5 +1,7 @@
 package com.cer.services.impl;
 
+import java.io.BufferedInputStream;
+import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,12 +177,12 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 		logger.info("deleteWarehouseItem end");
 		return result;
 	}
-	public String getAllSellerCoverage(String product )
+	public String getAllSellerCoverage(Product product )
  {
 		logger.info("getAllSellerCoverage Start");
 		String result = null;
 		String urlSearch = propertyConfigurer.getProperty("GET_ALL_SELLERS_FROM_ROUTING").replace("$", "=").replace("#",
-				product);
+				product.getName()).replace("@", product.getLattitude()).replace("~", product.getLongitude());
 		logger.info("URL to be hit is " + urlSearch);
 		HttpClient client = new HttpClient();
 		client.getParams().setAuthenticationPreemptive(true);
@@ -196,11 +199,49 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 
 			// print the status and response
 			//System.out.println(status + "\n" + get.getResponseBodyAsString());
-			result = get.getResponseBodyAsString();
+			//result = get.getResponseBodyAsString();
+			
+			//InputStream is = null;
+			
+			StringBuilder strBuilder = new StringBuilder();
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(get.getResponseBodyAsStream(), writer, "UTF-8");
+			strBuilder.append(writer.toString());
+			result = strBuilder.toString();
+			/*BufferedInputStream bfi =null; 
+			
+			int i;
+			char c;
+			 try{
+		         // new input stream created
+		         bfi =new BufferedInputStream( get.getResponseBodyAsStream());
+		         while(bfi.available() > 0)
+		         {
+		        	 strBuilder.append((char)bfi.read());
+		        }
+		         
+		        
+		      }catch(Exception e){
+		         
+		         // if any I/O error occurs
+		         e.printStackTrace();
+		      }finally{
+		         
+		         // releases system resources associated with this stream
+		         if(bfi!=null)
+		            bfi.close();
+		      }
+			 result = strBuilder.toString();*/
+			
+			
+			
 
 		}catch(Exception ex){
 			ex.printStackTrace();
-		} finally {
+		}
+		catch(Throwable th){
+			th.printStackTrace();
+		}finally {
 			// release any connection resources used by the method
 			get.releaseConnection();
 		}
