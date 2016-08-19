@@ -275,8 +275,17 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 	public String getProductCampaign(String product) {
 		logger.info("getProductCampaign Start");
 		String result = null;
-		String urlSearch = propertyConfigurer.getProperty("GET_PRODUCT_CAMPAIGN").replace("$", "=")
-				.replace("#", product);
+		/*String urlSearch = propertyConfigurer.getProperty("GET_CONFIDENCE_METRICS_FOR_A_SELLER").replace("$", "=")
+				.replace("#", product).replace("@", lat).replace("~", lng);
+		*/
+		String urlSearch = propertyConfigurer.getProperty("GET_PRODUCT_CAMPAIGN");
+		
+		NameValuePair nv1  = new NameValuePair();
+		nv1.setName("Data.productCategory");
+		nv1.setValue(product);
+		
+		
+		
 		logger.info("URL to be hit is " + urlSearch);
 		HttpClient client = new HttpClient();
 		client.getParams().setAuthenticationPreemptive(true);
@@ -285,10 +294,13 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 
 		client.getState().setCredentials(AuthScope.ANY, defaultcreds);
 
-		HttpMethod get = new GetMethod(urlSearch);
-		get.setDoAuthentication(true);
+		HttpMethod get = null; 
+		
+		
 		try {
-
+			get = new GetMethod(urlSearch);
+			get.setQueryString(new NameValuePair[]{nv1});
+			get.setDoAuthentication(true);
 			int status = client.executeMethod(get);
 			StringBuilder strBuilder = new StringBuilder();
 			StringWriter writer = new StringWriter();

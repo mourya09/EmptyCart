@@ -661,7 +661,7 @@ function showProductCategory()
 			if(insideSeller != null && insideSeller.length > 0){
 					for( var _key in insideSeller[_val].products)	
 					{
-						_str = _str + '<option value="'+insideSeller[_val].products[_key].Product_category+'" lattitude="'+insideSeller[_val].Latitude+'" longitude="'+insideSeller[_val].Longitude+'">'+insideSeller[_val].products[_key].Name+'</option>';
+						_str = _str + '<option type="INSIDE" value="'+insideSeller[_val].products[_key].Product_category+'" lattitude="'+insideSeller[_val].Latitude+'" longitude="'+insideSeller[_val].Longitude+'">'+insideSeller[_val].products[_key].Name+'</option>';
 					}
 					showSingleGeofence(insideSeller[_val], type);
 			}
@@ -671,7 +671,7 @@ function showProductCategory()
 			if(outsideSeller != null && outsideSeller.length > 0){
 				for( var _key in outsideSeller[_val].products)	
 					{
-						_str = _str + '<option value="'+outsideSeller[_val].products[_key].Product_category+'" lattitude="'+outsideSeller[_val].Latitude+'" longitude="'+outsideSeller[_val].Longitude+'">'+outsideSeller[_val].products[_key].Name+'</option>';
+						_str = _str + '<option type="OUTSIDE" value="'+outsideSeller[_val].products[_key].Product_category+'" lattitude="'+outsideSeller[_val].Latitude+'" longitude="'+outsideSeller[_val].Longitude+'">'+outsideSeller[_val].products[_key].Name+'</option>';
 					}	
 						showSingleGeofence(outsideSeller[_val], type);
 			
@@ -712,7 +712,12 @@ function showConfidence()
 }
 function pushOffers()
 {
-	dataToSearch = {name: $('#product').val(),lattitude:setLocationPosition.latitude , longitude:setLocationPosition.longitude} ;
+	if($('#showConfidenceWithProduct option:selected').attr('type') == "INSIDE")
+	{
+		alert("Please the Seller from Outside region");
+		return;
+	}
+	dataToSearch = dataToSearch = {name: $('#showConfidenceWithProduct option:selected').val()} ;
 	dataToSearch = $.param(dataToSearch);
 	$.ajax({
 		url: 'getProductCampaign.html',
@@ -722,7 +727,18 @@ function pushOffers()
 		cache: false,
 		dataType : "json",
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
-		success: function(data){}
+		success: function(data){
+			if(data != null && typeof data.Output != 'undefined' && data.Output.length > 0)
+			{
+				str = "Push Offers \n\n\n"
+				for(var key in data.Output[0])
+				{
+					str = str + key + "  :  " + data.Output[0][key] + "\n";
+				}
+				alert(str);
+			}
+			
+		}
 			
 		
 	}); 
