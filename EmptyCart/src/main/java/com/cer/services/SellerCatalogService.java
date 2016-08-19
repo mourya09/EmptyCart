@@ -14,6 +14,9 @@ public interface SellerCatalogService {
 	public String getAllSellerCoverage(Product product );
 	public Boolean deleteSellerCatalog(Long sellerCatalog);
 	
+	public  String getConfidenceMetrics(String product, String lat, String lng);
+	public String getProductCampaign(String product);
+	
 	
 
 }

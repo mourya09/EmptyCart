@@ -137,6 +137,46 @@ public class SellerController {
 		return result;
 	}
 	
+	@RequestMapping(value = "/getConfidenceMetrics"/*, method = RequestMethod.POST, headers = "application/x-www-form-urlencoded; charset=UTF-8"*/)
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	private @ResponseBody String getConfidenceMetrics(@ModelAttribute Product product, BindingResult bindingresult,
+			HttpServletRequest request) {
+		String result = null;
+		logger.info("getConfidenceMetrics Start");
+		  List<FieldError> errors = bindingresult.getFieldErrors();
+		    for (FieldError error : errors ) {
+		    	logger.info(error.getObjectName() + " - " + error.getDefaultMessage());
+		    }
+		
+		if(product.getName() == null || product.getName().equalsIgnoreCase(""))
+		{
+			product.setName(request.getParameter("name"));
+		}
+		result = sellerCatalogService.getConfidenceMetrics(product.getName(), product.getLattitude(), product.getLongitude());
+		
+		logger.info("getConfidenceMetrics End");
+		return result;
+	}
+	@RequestMapping(value = "/getProductCampaign"/*, method = RequestMethod.POST, headers = "application/x-www-form-urlencoded; charset=UTF-8"*/)
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	private @ResponseBody String getProductCampaign(@ModelAttribute Product product, BindingResult bindingresult,
+			HttpServletRequest request) {
+		String result = null;
+		logger.info("getProductCampaign Start");
+		  List<FieldError> errors = bindingresult.getFieldErrors();
+		    for (FieldError error : errors ) {
+		    	logger.info(error.getObjectName() + " - " + error.getDefaultMessage());
+		    }
+		
+		if(product.getName() == null || product.getName().equalsIgnoreCase(""))
+		{
+			product.setName(request.getParameter("name"));
+		}
+		result = sellerCatalogService.getProductCampaign(product.getName());
+		
+		logger.info("getProductCampaign End");
+		return result;
+	}
 	
 	@ModelAttribute
     public Product getProduct(){

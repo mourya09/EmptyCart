@@ -179,15 +179,25 @@
 						<div id="nav_3" class="collapse nav-section-body-wrapper">
 							<div class="nav-section-body">
 								<p>
-									Display visit route on the map.
+									Display confidence metrics and push offers.
 								</p>
 								<div class="check_box_inpt">
-                                   	<label for="agent">Show route for today - Agent</label>
-									<select id = 'agent' disabled>
-										<option value='----' selected>----</option>
-									</select>
-									<button class="btn btn-primary" type="button" style='margin-left:8px;' id='generateRoute' disabled>Generate route</button>
-									<label id = 'lblRouteTW' style="display:none;font-weight: 500;color: #007ac2;"></label>
+                                   	
+									<select id="showConfidence" name="v11" onchange="showProductCategory()" >
+									<option value="-1"> Please select Product Sellers </option>
+									
+									</select><br><br>
+									<select id="showConfidenceWithProduct" name="v11" onchange="showConfidence()" >
+									<option value="-1"> Please select Product Category </option>
+									
+									</select><br>
+									<br>
+									<label for="agent">Show Confidence Metrics </label><br>
+									<input type="radio" id="pushOffers" name="v11" onclick="pushOffers()" />
+									<label for="agent">Show Push Offers </label><br>
+									
+									
+									
 								</div>
 								<!--  <div id="directionDetailsTW" style="display:none;"></div> -->
 							</div>

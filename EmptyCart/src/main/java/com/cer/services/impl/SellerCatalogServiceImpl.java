@@ -1,13 +1,14 @@
 package com.cer.services.impl;
 
-import java.io.BufferedInputStream;
 import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.commons.el.NamedValue;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -111,8 +112,8 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 	public List<Seller> getAllSeller(String product, String lat, String lng) {
 		logger.info("getAllSeller start");
 		List<Seller> result = null;
-		String sqlQuery = propertyConfigurer.getProperty("GET_ALL_WITHIN_A_CERTAIN_DISTANCE2")
-				.replaceAll("#", lat).replaceAll("&", lng).replaceAll("@", product.toLowerCase());
+		String sqlQuery = propertyConfigurer.getProperty("GET_ALL_WITHIN_A_CERTAIN_DISTANCE2").replaceAll("#", lat)
+				.replaceAll("&", lng).replaceAll("@", product.toLowerCase());
 		try {
 			result = gmDao.nearestWarehouse(sqlQuery);
 		} catch (SQLException e) {
@@ -121,7 +122,7 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 		}
 		if (result.isEmpty()) {
 			logger.info("Not able to find the product in the SellerCatalog");
-		} 
+		}
 
 		logger.info("getAllSeller end");
 		return result;
@@ -177,12 +178,13 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 		logger.info("deleteWarehouseItem end");
 		return result;
 	}
-	public String getAllSellerCoverage(Product product )
- {
+
+	public String getAllSellerCoverage(Product product) {
 		logger.info("getAllSellerCoverage Start");
 		String result = null;
-		String urlSearch = propertyConfigurer.getProperty("GET_ALL_SELLERS_FROM_ROUTING").replace("$", "=").replace("#",
-				product.getName()).replace("@", product.getLattitude()).replace("~", product.getLongitude());
+		String urlSearch = propertyConfigurer.getProperty("GET_ALL_SELLERS_FROM_ROUTING").replace("$", "=")
+				.replace("#", product.getName()).replace("@", product.getLattitude())
+				.replace("~", product.getLongitude());
 		logger.info("URL to be hit is " + urlSearch);
 		HttpClient client = new HttpClient();
 		client.getParams().setAuthenticationPreemptive(true);
@@ -194,54 +196,18 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 		HttpMethod get = new GetMethod(urlSearch);
 		get.setDoAuthentication(true);
 		try {
-			// execute the GET
-			int status = client.executeMethod(get);
 
-			// print the status and response
-			//System.out.println(status + "\n" + get.getResponseBodyAsString());
-			//result = get.getResponseBodyAsString();
-			
-			//InputStream is = null;
-			
+			int status = client.executeMethod(get);
 			StringBuilder strBuilder = new StringBuilder();
 			StringWriter writer = new StringWriter();
 			IOUtils.copy(get.getResponseBodyAsStream(), writer, "UTF-8");
 			strBuilder.append(writer.toString());
 			result = strBuilder.toString();
-			/*BufferedInputStream bfi =null; 
-			
-			int i;
-			char c;
-			 try{
-		         // new input stream created
-		         bfi =new BufferedInputStream( get.getResponseBodyAsStream());
-		         while(bfi.available() > 0)
-		         {
-		        	 strBuilder.append((char)bfi.read());
-		        }
-		         
-		        
-		      }catch(Exception e){
-		         
-		         // if any I/O error occurs
-		         e.printStackTrace();
-		      }finally{
-		         
-		         // releases system resources associated with this stream
-		         if(bfi!=null)
-		            bfi.close();
-		      }
-			 result = strBuilder.toString();*/
-			
-			
-			
-
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
-		}
-		catch(Throwable th){
+		} catch (Throwable th) {
 			th.printStackTrace();
-		}finally {
+		} finally {
 			// release any connection resources used by the method
 			get.releaseConnection();
 		}
@@ -250,6 +216,97 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 		logger.info("getAllSellerCoverage End");
 		return result;
 	}
+
+	public String getConfidenceMetrics(String product, String lat, String lng) {
+		logger.info("getConfidenceMetrics Start");
+		String result = null;
+		/*String urlSearch = propertyConfigurer.getProperty("GET_CONFIDENCE_METRICS_FOR_A_SELLER").replace("$", "=")
+				.replace("#", product).replace("@", lat).replace("~", lng);
+		*/
+		String urlSearch = propertyConfigurer.getProperty("GET_CONFIDENCE_METRICS_FOR_A_SELLER");
+		
+		NameValuePair nv1  = new NameValuePair();
+		nv1.setName("Data.productCategory");
+		nv1.setValue(product);
+		
+		NameValuePair nv2  = new NameValuePair();
+		nv2.setName("Data.Latitude");
+		nv2.setValue(lat);
+		
+		NameValuePair nv3  = new NameValuePair();
+		nv3.setName("Data.Longitude");
+		nv3.setValue(lng);
+		
+		logger.info("URL to be hit is " + urlSearch);
+		HttpClient client = new HttpClient();
+		client.getParams().setAuthenticationPreemptive(true);
+		Credentials defaultcreds = new UsernamePasswordCredentials(propertyConfigurer.getProperty("ROUTE_USERNAME"),
+				propertyConfigurer.getProperty("ROUTE_PASSWORD"));
+
+		client.getState().setCredentials(AuthScope.ANY, defaultcreds);
+
+		HttpMethod get = null; 
+		
+		
+		try {
+			get = new GetMethod(urlSearch);
+			get.setQueryString(new NameValuePair[]{nv1, nv2,nv3});
+			get.setDoAuthentication(true);
+			int status = client.executeMethod(get);
+			StringBuilder strBuilder = new StringBuilder();
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(get.getResponseBodyAsStream(), writer, "UTF-8");
+			strBuilder.append(writer.toString());
+			result = strBuilder.toString();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} catch (Throwable th) {
+			th.printStackTrace();
+		} finally {
+			// release any connection resources used by the method
+			get.releaseConnection();
+		}
+
+		logger.info("Response obtained" + result);
+		logger.info("getConfidenceMetrics End");
+		return result;
+	}
 	
-	
+	public String getProductCampaign(String product) {
+		logger.info("getProductCampaign Start");
+		String result = null;
+		String urlSearch = propertyConfigurer.getProperty("GET_PRODUCT_CAMPAIGN").replace("$", "=")
+				.replace("#", product);
+		logger.info("URL to be hit is " + urlSearch);
+		HttpClient client = new HttpClient();
+		client.getParams().setAuthenticationPreemptive(true);
+		Credentials defaultcreds = new UsernamePasswordCredentials(propertyConfigurer.getProperty("ROUTE_USERNAME"),
+				propertyConfigurer.getProperty("ROUTE_PASSWORD"));
+
+		client.getState().setCredentials(AuthScope.ANY, defaultcreds);
+
+		HttpMethod get = new GetMethod(urlSearch);
+		get.setDoAuthentication(true);
+		try {
+
+			int status = client.executeMethod(get);
+			StringBuilder strBuilder = new StringBuilder();
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(get.getResponseBodyAsStream(), writer, "UTF-8");
+			strBuilder.append(writer.toString());
+			result = strBuilder.toString();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} catch (Throwable th) {
+			th.printStackTrace();
+		} finally {
+			// release any connection resources used by the method
+			get.releaseConnection();
+		}
+
+		logger.info("Response obtained" + result);
+		logger.info("getProductCampaign End");
+		return result;
+	}
+
 }

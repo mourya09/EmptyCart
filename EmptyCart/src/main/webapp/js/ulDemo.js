@@ -464,8 +464,8 @@ function searchData3()
 			}
 				//var pushpinOptions = {'icon': 'images/location_icon.png', 'width': 50, 'height': 50,'draggable': false};
 				var pushpinOptions = {'icon': 'images/location_icon.png', width: 50, height: 50};
-				//var pushpinOptions1 = {'icon': 'images/location_icon1.png', width: 50, height: 50};
-				var pushpinOptions1 = {'icon': 'images/location_icon.png', width: 50, height: 50};
+				var pushpinOptions1 = {'icon': 'images/location_icon1.png', width: 50, height: 50};
+				//var pushpinOptions1 = {'icon': 'images/location_icon.png', width: 50, height: 50};
 				//var pushpin2= new Microsoft.Maps.Pushpin(sellerlocation[0], pushpinOptions);
 				//var pushpin1= new Microsoft.Maps.Pushpin(setLocationPosition, pushpinOptions);
 				//GSDS.map.entities.push(pushpin1);									
@@ -481,7 +481,7 @@ function searchData3()
 				}
 				for(var i=0; outsideSeller != null &&outsideSeller.length > 0 && i< outsideSeller.length; i++)
 				{ 
-					boundlocation.push(outsideSeller[i]);
+					boundlocation.push({longitude:outsideSeller[i].Longitude,latitude:outsideSeller[i].Latitude});
 					GSDS.map.entities.push(new Microsoft.Maps.Pushpin({longitude:outsideSeller[i].Longitude,latitude:outsideSeller[i].Latitude}, pushpinOptions1));
 				}
 				//GSDS.map.entities.push({latitude:setLocationPosition.latitude,longitude:setLocationPosition.longitude}, {'draggable': false});
@@ -522,6 +522,8 @@ function searchPart2(dataToSearch)
 			outsideSeller = [];
 			sellerlocation = new Array();
 			GSDS.clearMap();
+			var pushpinOptions = {'icon': 'images/location_icon.png', width: 50, height: 50,'draggable': false};
+			var pushpinOptions1 = {'icon': 'images/location_icon1.png', width: 50, height: 50,'draggable': false};
 			for(var key in data.Output)
 			{
 				if(typeof data.Output[key].Status != 'undefined' && data.Output[key].Status == 'F')
@@ -530,16 +532,20 @@ function searchPart2(dataToSearch)
 				}
 				if(typeof data.Output[key] != 'undefined' && data.Output[key] != null  )
 				{
+					//var _htmlContent= '<img src="pb.png">';
+					
 					data.Output[key].COVERAGE = $.parseJSON(data.Output[key].COVERAGE);
 					toRender.push(data.Output[key].COVERAGE);
 					data.Output[key].Latitude = parseFloat(data.Output[key].Latitude);
 					data.Output[key].Longitude=parseFloat(data.Output[key].Longitude)
-					sellerlocation.push({latitude:data.Output[key].Latitude,longitude:data.Output[key].Longitude});
-					if(data.Output[key].TAG == "INSIDE"){
+					
+					
+					if(data.Output[key].TAG == "INSIDE"){						
 						insideSeller.push(data.Output[key]);
+						sellerlocation.push({latitude:data.Output[key].Latitude,longitude:data.Output[key].Longitude, pin : pushpinOptions});
 					
 					}else{
-						
+						sellerlocation.push({latitude:data.Output[key].Latitude,longitude:data.Output[key].Longitude, pin : pushpinOptions1});
 						outsideSeller.push(data.Output[key]);
 					}
 				}
@@ -549,8 +555,7 @@ function searchPart2(dataToSearch)
 				
 			}
 				//var pushpinOptions = {'icon': 'images/location_icon.png', 'width': 50, 'height': 50,'draggable': false};
-				var pushpinOptions = {'icon': 'images/location_icon.png', width: 50, height: 50};
-				var pushpinOptions1 = {'icon': 'images/location_icon1.png', width: 50, height: 50};
+				
 				//var pushpin2= new Microsoft.Maps.Pushpin(sellerlocation[0], pushpinOptions);
 				//var pushpin1= new Microsoft.Maps.Pushpin(setLocationPosition, pushpinOptions);
 				//GSDS.map.entities.push(pushpin1);									
@@ -558,16 +563,30 @@ function searchPart2(dataToSearch)
 								
 				//displayUserLocation();
 				var boundlocation =[];
+				_str = '<option value="-1" selected="selected"> Please select Product Sellers </option>';
+				
 				for(var i=0; i< sellerlocation.length; i++)
 				{ 
 					boundlocation.push(sellerlocation[i]);
-					GSDS.map.entities.push(new Microsoft.Maps.Pushpin(sellerlocation[i], pushpinOptions));
+					GSDS.map.entities.push(new Microsoft.Maps.Pushpin(sellerlocation[i], sellerlocation[i].pin));
 				}
-				for(var i=0; outsideSeller != null && i< outsideSeller.length; i++)
-				{ 
-					boundlocation.push(outsideSeller[i]);
-					GSDS.map.entities.push(new Microsoft.Maps.Pushpin(outsideSeller[i], pushpinOptions1));
+				if(insideSeller != null && insideSeller.length > 0){
+					_str=_str+ "<option value='-1' type='INSIDE'>Inside Seller's within the zone</option>";
+					for(var i=0; insideSeller != null && i< insideSeller.length; i++)
+					{ 
+						_str =_str + "<option value='"+i+"' type='INSIDE' >"+insideSeller[i].SELLER_NAME +" "+ insideSeller[i].Locality+"</option>";
+					}
+					
 				}
+				if(outsideSeller != null && outsideSeller.length > 0){
+					_str=_str+ "<option value='-1' type='OUTSIDE'>Outside Seller's Outside the Zone</option>";
+					for(var i=0; outsideSeller != null && i< outsideSeller.length; i++)
+					{ 
+						_str =_str + "<option value='"+i+"' type='OUTSIDE' >"+outsideSeller[i].SELLER_NAME +" "+ outsideSeller[i].Locality+"</option>";
+					}
+				}
+				$('#showConfidence').html(_str );
+				
 				//GSDS.map.entities.push({latitude:setLocationPosition.latitude,longitude:setLocationPosition.longitude}, {'draggable': false});
 				boundlocation.push(setLocationPosition);
 				
@@ -596,6 +615,119 @@ function searchPart2(dataToSearch)
 		
 	});
 }
+function showSingleGeofence(masterData, type)
+{
+					GSDS.clearMap();
+					var lineVertices = [];
+					var locationArr = [];
+					
+					var newPos = 0;
+					for(var i=0; i<masterData.COVERAGE.coordinates[0].length; i++){
+						locationArr[i] = {};						
+						locationArr[i].latitude = masterData.COVERAGE.coordinates[0][i][1];
+						locationArr[i].longitude = masterData.COVERAGE.coordinates[0][i][0];
+						
+						lineVertices[i] = new Microsoft.Maps.Location(locationArr[i].latitude, locationArr[i].longitude);
+						//boundlocation.push(locationArr[i]);
+					}
+					var val=Math.floor((Math.random() * 250) + 1);
+					var val1=Math.floor((Math.random() * 250) + 1);
+					var options = {
+									fillColor: new Microsoft.Maps.Color(val, 0, val1, 0),
+									//fillColor: colorsArr[i],
+									strokeColor: new Microsoft.Maps.Color(val, 0, val1, 0),
+									strokeThickness: 3
+								};
+								
+					var line = new Microsoft.Maps.Polyline(lineVertices, options);
+					GSDS.map.entities.push(line);
+					var pin = new Microsoft.Maps.Pushpin(setLocationPosition, {'draggable': false});  
+					GSDS.map.entities.push(pin);	
+					var pushpinOptions1 = {'icon': 'images/location_icon.png', width: 50, height: 50};	
+					if(type == "OUTSIDE"){					
+					var pushpinOptions1 = {'icon': 'images/location_icon1.png', width: 50, height: 50};
+					}					
+					var pin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(masterData.Latitude, masterData.Longitude), pushpinOptions1);             
+					GSDS.map.entities.push(pin);
+}
+
+function showProductCategory()
+{
+	if($('#showConfidence').val() != "-1"){
+		type = $('#showConfidence option:selected').attr('type');
+		_val = parseInt($('#showConfidence  option:selected').val(),10);
+		 _str = '<option value="-1" selected="selected"> Please select Product Category </option>';
+		if(type == "INSIDE"){
+			if(insideSeller != null && insideSeller.length > 0){
+					for( var _key in insideSeller[_val].products)	
+					{
+						_str = _str + '<option value="'+insideSeller[_val].products[_key].Product_category+'" lattitude="'+insideSeller[_val].Latitude+'" longitude="'+insideSeller[_val].Longitude+'">'+insideSeller[_val].products[_key].Name+'</option>';
+					}
+					showSingleGeofence(insideSeller[_val], type);
+			}
+			
+		}else if(type == "OUTSIDE")
+		{
+			if(outsideSeller != null && outsideSeller.length > 0){
+				for( var _key in outsideSeller[_val].products)	
+					{
+						_str = _str + '<option value="'+outsideSeller[_val].products[_key].Product_category+'" lattitude="'+outsideSeller[_val].Latitude+'" longitude="'+outsideSeller[_val].Longitude+'">'+outsideSeller[_val].products[_key].Name+'</option>';
+					}	
+						showSingleGeofence(outsideSeller[_val], type);
+			
+			}
+					
+			
+		}
+		$('#showConfidenceWithProduct').html(_str);
+	}
+}
+
+function showConfidence()
+{
+	dataToSearch = {name: $('#showConfidenceWithProduct option:selected').val(),lattitude:$('#showConfidenceWithProduct option:selected').attr('lattitude') , longitude:$('#showConfidenceWithProduct option:selected').attr('longitude')} ;
+	
+	dataToSearch = $.param(dataToSearch);
+	$.ajax({
+		url: 'getConfidenceMetrics.html',
+		data: dataToSearch,
+		type:'POST',
+		cache: false,
+		dataType : "json",
+		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+		success: function(data){
+			if(data != null && typeof data.Output != 'undefined' && data.Output.length > 0)
+			{
+				str = "Confidence Metrics\n\n\n"
+				for(var key in data.Output[0])
+				{
+					str = str + key + "  :  " + data.Output[0][key] + "\n";
+				}
+				alert(str);
+			}
+		}
+			
+		
+	}); 
+}
+function pushOffers()
+{
+	dataToSearch = {name: $('#product').val(),lattitude:setLocationPosition.latitude , longitude:setLocationPosition.longitude} ;
+	dataToSearch = $.param(dataToSearch);
+	$.ajax({
+		url: 'getProductCampaign.html',
+		//url: 'js/sample.js',
+		data: dataToSearch,
+		type:'POST',
+		cache: false,
+		dataType : "json",
+		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+		success: function(data){}
+			
+		
+	}); 
+}
+
 GEOAPIS_V1.apiDemo.prototype.showBranches = function(){
  	var that = this;
 	
