@@ -91,9 +91,9 @@
 						</div>
 						<div id="nav_2" class="collapse nav-section-body-wrapper">
 							<div class="nav-section-body">
-								<p>
+								<!-- <p>
 									Click on the map to set customer's location.
-								</p>
+								</p> -->
 								<div class="">
 									<!-- <input type="button" name="setLocation" value="Set Location" onclick="setUserLocation()" ><br> -->
 									<input type="text" name="text" id="product" value="" placeholder="Category" >
@@ -226,7 +226,7 @@
 			<div  class="">
 				<div class="row">
 					<div class="col-lg-6">
-						<a href="http://www.pb.com"><i class="pb-footer-logo gradient"></i></a>© 2015 Pitney Bowes Inc. All rights reserved.
+						<a href="http://www.pb.com"><i class="pb-footer-logo gradient"></i></a>Â© 2015 Pitney Bowes Inc. All rights reserved.
 					</div>
 					<div class="col-lg-6 text-right xs-text-left">
 						<ul class="list-unstyled list-inline social">
@@ -272,16 +272,33 @@
 				<div class="togglebar_dn" id="btmarrow">&nbsp;</div>
 				<h1 class="srch" id="btmgridpanelheader" style="float:left;width:300px;">Results Grid</h1>                
 				<div class="action" style="clear:none;margin-top:8px;">
-					<a href="javascript:void(0);" id="minimize" class="btnmin" title="Minimize">&nbsp;</a>
-					<a href="javascript:void(0);" id="maxrest" class="btnmax" title="Maximize">&nbsp;</a>
+					<!-- <a href="javascript:void(0);" id="minimize" class="btnmin" title="Minimize">&nbsp;</a>
+					<a href="javascript:void(0);" id="maxrest" class="btnmax" title="Maximize">&nbsp;</a> -->
 					<a href="javascript:void(0);" id="Close" class="btnclose" title="Close Panel">&nbsp;</a>
 				</div>
 			</div>
 			<div class="innertube">
 				<div id="resultsGrid">
 					<div id="apiDemo-sd-resultTbl"></div>
+					<table class="table table-hover" id="rdet">
+		<thead>
+		<tr>
+			<th>Pin Code</th>
+			<th>First Day</th>
+			<th>Second Day</th>
+			<th>Third Day</th>
+			<th>Fourth Day</th>
+			<th>Fifth Day</th>
+			<th>Product Category</th>			
+			
+		</tr>
+	</thead>
+            <tbody>
+			</tbody>
+			</table>
 				</div>
 			</div>
 		</div>
+		
 	</body>
 </html>

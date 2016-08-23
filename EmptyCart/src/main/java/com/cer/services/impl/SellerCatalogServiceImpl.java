@@ -320,5 +320,110 @@ public class SellerCatalogServiceImpl implements SellerCatalogService {
 		logger.info("getProductCampaign End");
 		return result;
 	}
+	
+	public String getGeocodeAddress(String address){
+
+		logger.info("getGeocodeAddress Start");
+		String result = null;
+		/*String urlSearch = propertyConfigurer.getProperty("GET_CONFIDENCE_METRICS_FOR_A_SELLER").replace("$", "=")
+				.replace("#", product).replace("@", lat).replace("~", lng);
+		*/
+		String urlSearch = propertyConfigurer.getProperty("GET_GEOCODE_FOR_CUSTOMER");
+		
+		NameValuePair nv1  = new NameValuePair();
+		nv1.setName("Data.addr");
+		nv1.setValue(address);
+		
+		
+		
+		logger.info("URL to be hit is " + urlSearch);
+		HttpClient client = new HttpClient();
+		client.getParams().setAuthenticationPreemptive(true);
+		Credentials defaultcreds = new UsernamePasswordCredentials(propertyConfigurer.getProperty("ROUTE_USERNAME"),
+				propertyConfigurer.getProperty("ROUTE_PASSWORD"));
+
+		client.getState().setCredentials(AuthScope.ANY, defaultcreds);
+
+		HttpMethod get = null; 
+		
+		
+		try {
+			get = new GetMethod(urlSearch);
+			get.setQueryString(new NameValuePair[]{nv1});
+			get.setDoAuthentication(true);
+			int status = client.executeMethod(get);
+			StringBuilder strBuilder = new StringBuilder();
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(get.getResponseBodyAsStream(), writer, "UTF-8");
+			strBuilder.append(writer.toString());
+			result = strBuilder.toString();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} catch (Throwable th) {
+			th.printStackTrace();
+		} finally {
+			// release any connection resources used by the method
+			get.releaseConnection();
+		}
+
+		logger.info("Response obtained" + result);
+		logger.info("getGeocodeAddress End");
+		return result;
+	
+	}
+	public String getReverseGeoCodeAddress(String lat, String lng)
+	{
+
+		logger.info("getProductCampaign Start");
+		String result = null;
+		/*String urlSearch = propertyConfigurer.getProperty("GET_CONFIDENCE_METRICS_FOR_A_SELLER").replace("$", "=")
+				.replace("#", product).replace("@", lat).replace("~", lng);
+		*/
+		String urlSearch = propertyConfigurer.getProperty("GET_REVERSEGEOCODE_FOR_CUSTOMER");
+		
+		NameValuePair nv1  = new NameValuePair();
+		nv1.setName("Data.Latitude");
+		nv1.setValue(lat);
+		
+		NameValuePair nv2  = new NameValuePair();
+		nv1.setName("Data.Longitude");
+		nv1.setValue(lng);
+		
+		
+		logger.info("URL to be hit is " + urlSearch);
+		HttpClient client = new HttpClient();
+		client.getParams().setAuthenticationPreemptive(true);
+		Credentials defaultcreds = new UsernamePasswordCredentials(propertyConfigurer.getProperty("ROUTE_USERNAME"),
+				propertyConfigurer.getProperty("ROUTE_PASSWORD"));
+
+		client.getState().setCredentials(AuthScope.ANY, defaultcreds);
+
+		HttpMethod get = null; 
+		
+		
+		try {
+			get = new GetMethod(urlSearch);
+			get.setQueryString(new NameValuePair[]{nv1,nv2});
+			get.setDoAuthentication(true);
+			int status = client.executeMethod(get);
+			StringBuilder strBuilder = new StringBuilder();
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(get.getResponseBodyAsStream(), writer, "UTF-8");
+			strBuilder.append(writer.toString());
+			result = strBuilder.toString();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} catch (Throwable th) {
+			th.printStackTrace();
+		} finally {
+			// release any connection resources used by the method
+			get.releaseConnection();
+		}
+
+		logger.info("Response obtained" + result);
+		logger.info("getProductCampaign End");
+		return result;
+	
+	}
 
 }

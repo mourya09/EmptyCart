@@ -16,7 +16,8 @@ public interface SellerCatalogService {
 	
 	public  String getConfidenceMetrics(String product, String lat, String lng);
 	public String getProductCampaign(String product);
-	
+	public String getGeocodeAddress(String address);
+	public String getReverseGeoCodeAddress(String lat, String lng);
 	
 
 }

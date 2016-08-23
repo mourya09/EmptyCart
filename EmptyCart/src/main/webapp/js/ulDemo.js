@@ -696,14 +696,21 @@ function showConfidence()
 		dataType : "json",
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 		success: function(data){
+			$('#btmgridpanel').show();
 			if(data != null && typeof data.Output != 'undefined' && data.Output.length > 0)
 			{
-				str = "Confidence Metrics\n\n\n"
+				str = "<tr>"
+				var count = 0;
 				for(var key in data.Output[0])
 				{
-					str = str + key + "  :  " + data.Output[0][key] + "\n";
+					str = str + " <td>" + data.Output[0][key] + "</td>";
+					if(count++ > 6)
+					{
+						break;
+					}
 				}
-				alert(str);
+				str  = str +  '</tr>';
+				$('#rdet').append(str);
 			}
 		}
 			
@@ -1645,7 +1652,7 @@ $('#nav_3').on('show.bs.collapse', function () {
 	});
 	
 	//Add handler for the map click event.
-	Microsoft.Maps.Events.addHandler(GSDS.map, 'rightclick', onMapClick);
+	//Microsoft.Maps.Events.addHandler(GSDS.map, 'rightclick', onMapClick);
 
 });
 
@@ -1671,12 +1678,14 @@ var pushpinFrameHTML = '<div class="infobox"><div class="modal-header"><button t
 
 function geocodeAddress(address){
 	var _data;
+	dataToSearch = 'name=' + address;
 	$.ajax({
-			url: '/rest/GeocodeService/results.json?Data.addr='+ address,
+			url: 'GeocodeService.html',
 			dataType: 'json',
 			cache: false,
+			data: dataToSearch,
 			async: false,
-			contentType: 'application/json',
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 			success: function(data){
 				_data = data.Output[0];
 				},
@@ -1692,12 +1701,16 @@ function geocodeAddress(address){
 
 function reverseGeocode(lat, lng){
 	var _data;
+	dataToSearch = 'lattitude='+ lat +'&longitude=' + lng;
+	
 	$.ajax({
-			url: '/rest/ReverseGeocodeService/results.json?Data.Latitude='+ lat + '&Data.Longitude=' + lng,
+			url: 'ReverseGeocodeService.html',
 			dataType: 'json',
+			data: dataToSearch,
+			type: 'POST',
 			cache: false,
 			async: false,
-			contentType: 'application/json',
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 			success: function(data){
 				_data = data.Output[0].Address;
 			},
@@ -1716,7 +1729,7 @@ function onMapClick(e) {
 		
 		if (e.target != null)
 		{
-			if(($('#deliveryRoutes').is(':checked')) || ($('#deliveryRoutes2').is(':checked'))){
+			//if(($('#deliveryRoutes').is(':checked')) || ($('#deliveryRoutes2').is(':checked'))){
 				var point = new Microsoft.Maps.Point(e.getX(), e.getY());
 				var loc = e.target.tryPixelToLocation(point);
 				var address = reverseGeocode(loc.latitude, loc.longitude)
@@ -1742,10 +1755,7 @@ function onMapClick(e) {
 					}
 				});				
 				
-			}
-			else if(isTWuseCase){
-				addMarkerToRouteTW(e);
-			}
+			
 		}
 	}
 }
@@ -1922,6 +1932,14 @@ function getCustomer(id){
 	}
 }
 
+$( document ).ready(function(){
+	Microsoft.Maps.Events.addHandler(GSDS.map, 'rightclick', onMapClick);
+	$('#btnclose').on('click',function(){
+		
+		$('#btmgridpanel').hide();
+		//$('#btmgridpanel').css('display','none');
+	});
+});
 
 function getZoom(map, params) {  // params are: locations, bounds, mapWidth, mapHeight, buffer
 

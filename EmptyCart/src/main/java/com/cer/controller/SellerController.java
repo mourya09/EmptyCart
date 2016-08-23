@@ -178,6 +178,48 @@ public class SellerController {
 		return result;
 	}
 	
+	
+	@RequestMapping(value = "/GeocodeService"/*, method = RequestMethod.POST, headers = "application/x-www-form-urlencoded; charset=UTF-8"*/)
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	private @ResponseBody String geocodeService(@ModelAttribute Product product, BindingResult bindingresult,
+			HttpServletRequest request) {
+		String result = null;
+		logger.info("geocodeService Start");
+		  List<FieldError> errors = bindingresult.getFieldErrors();
+		    for (FieldError error : errors ) {
+		    	logger.info(error.getObjectName() + " - " + error.getDefaultMessage());
+		    }
+		
+		if(product.getName() == null || product.getName().equalsIgnoreCase(""))
+		{
+			product.setName(request.getParameter("name"));
+		}
+		result = sellerCatalogService.getGeocodeAddress(product.getName());
+		
+		logger.info("geocodeService End");
+		return result;
+	}
+	@RequestMapping(value = "/ReverseGeocodeService"/*, method = RequestMethod.POST, headers = "application/x-www-form-urlencoded; charset=UTF-8"*/)
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	private @ResponseBody String reverseGeocodeService(@ModelAttribute Product product, BindingResult bindingresult,
+			HttpServletRequest request) {
+		String result = null;
+		logger.info("reverseGeocodeService Start");
+		  List<FieldError> errors = bindingresult.getFieldErrors();
+		    for (FieldError error : errors ) {
+		    	logger.info(error.getObjectName() + " - " + error.getDefaultMessage());
+		    }
+		
+		if(product.getName() == null || product.getName().equalsIgnoreCase(""))
+		{
+			product.setName(request.getParameter("name"));
+		}
+		result = sellerCatalogService.getReverseGeoCodeAddress(product.getLattitude(), product.getLongitude());
+		
+		logger.info("reverseGeocodeService End");
+		return result;
+	}
+	
 	@ModelAttribute
     public Product getProduct(){
         
