@@ -38,7 +38,7 @@
 					<!-- ngRepeat: navSection in navigationTree -->
 					<div class="panel nav-section ng-scope active">
 						<!--Navigation Pane Header-->
-						<div class="nav-section-header" data-toggle="collapse" data-parent="#navigation-wrapper" data-target="#nav_0">
+						<div class="nav-section-header" data-toggle="collapse" data-parent="#navigation-wrapper" data-target="#nav_1">
 							<table>
 								<tbody>
 									<tr>
@@ -55,8 +55,9 @@
 								</tbody>
 							</table>
 						</div>
-						<!--Navigation Pane Body-->
-						<div id="nav_0" class="nav-section-body-wrapper in">
+						<!--Navigation Pane Body
+						<div id="nav_0" class="nav-section-body-wrapper in">-->
+						<div id="nav_1" class="collapse nav-section-body-wrapper">
 							<div class="nav-section-body">
 								<p>
 									Click on the map to set customer's location.
@@ -226,7 +227,7 @@
 			<div  class="">
 				<div class="row">
 					<div class="col-lg-6">
-						<a href="http://www.pb.com"><i class="pb-footer-logo gradient"></i></a>Â© 2015 Pitney Bowes Inc. All rights reserved.
+						<a href="http://www.pb.com"><i class="pb-footer-logo gradient"></i></a>© 2015 Pitney Bowes Inc. All rights reserved.
 					</div>
 					<div class="col-lg-6 text-right xs-text-left">
 						<ul class="list-unstyled list-inline social">
@@ -280,7 +281,7 @@
 			<div class="innertube">
 				<div id="resultsGrid">
 					<div id="apiDemo-sd-resultTbl"></div>
-					<table class="table table-hover" id="rdet">
+					<table class="table table-hover" id="rdet"> 
 		<thead>
 		<tr>
 			<th>Pin Code</th>

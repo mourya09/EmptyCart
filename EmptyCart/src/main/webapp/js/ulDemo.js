@@ -327,8 +327,9 @@ function displayUserLocation()
 function searchProduct()
 {
 	
-	
-	var dataToSearch =
+	$('#loading').show();
+	GSDS.clearMap('customers');
+	var dataToSearch =null;
 	new Object();
 	dataToSearch = {name: $('#product').val(),lng:setLocationPosition.latitude,lat:setLocationPosition.longitude} ;
 	//alert(dataToSearch);
@@ -391,6 +392,9 @@ function searchProduct()
 }
 function showSellerGeofence()
 {
+	
+	GSDS.clearMap('customers');
+	$('#loading').show();
 	var boundlocation = [];
 			for(var key in toRender){
 					var lineVertices = [];
@@ -431,6 +435,21 @@ function showSellerGeofence()
 			var newZoom = getZoom(GSDS.map, params) - 1;
 					
 			GSDS.map.setView( {zoom:newZoom});	
+			if(typeof insideSeller != 'undefined' && insideSeller != null && insideSeller.length > 0)
+			{
+				for(var __key in insideSeller){
+					showSingleGeofence(insideSeller[__key], "INSIDE");
+				}
+			}	
+			if(typeof outsideSeller != 'undefined' && outsideSeller != null && outsideSeller.length > 0)
+			{
+				for(var __key in outsideSeller){
+					showSingleGeofence(outsideSeller[__key], "OUTSIDE");
+				}
+			}	
+			
+			
+			$('#loading').hide();
 }
 function searchData3()
 {
@@ -588,8 +607,9 @@ function searchPart2(dataToSearch)
 				$('#showConfidence').html(_str );
 				
 				//GSDS.map.entities.push({latitude:setLocationPosition.latitude,longitude:setLocationPosition.longitude}, {'draggable': false});
-				boundlocation.push(setLocationPosition);
-				
+				//boundlocation.push(setLocationPosition);
+				var pin = new Microsoft.Maps.Pushpin(setLocationPosition, {'draggable': false});             
+					GSDS.map.entities.push(pin);
 				
 				//boundlocation.push({longitude:76.9780752788086,
 				//		latitude:29.02612735020869});
@@ -605,8 +625,11 @@ function searchPart2(dataToSearch)
 			var newZoom = getZoom(GSDS.map, params) - 1;
 					
 			GSDS.map.setView( {zoom:newZoom});	
+			$('#loading').hide();
 			
-        }
+        },error:function(){
+			$('#loading').hide();
+		}
 			
 			 //var polygon = new Microsoft.Maps.Polygon([innerring]);
 			
@@ -653,6 +676,7 @@ function showSingleGeofence(masterData, type)
 
 function showProductCategory()
 {
+	GSDS.clearMap('customers');
 	if($('#showConfidence').val() != "-1"){
 		type = $('#showConfidence option:selected').attr('type');
 		_val = parseInt($('#showConfidence  option:selected').val(),10);
@@ -686,6 +710,7 @@ function showProductCategory()
 function showConfidence()
 {
 	dataToSearch = {name: $('#showConfidenceWithProduct option:selected').val(),lattitude:$('#showConfidenceWithProduct option:selected').attr('lattitude') , longitude:$('#showConfidenceWithProduct option:selected').attr('longitude')} ;
+	$('#loading').show();
 	
 	dataToSearch = $.param(dataToSearch);
 	$.ajax({
@@ -696,6 +721,7 @@ function showConfidence()
 		dataType : "json",
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 		success: function(data){
+			$('#loading').hide();
 			$('#btmgridpanel').show();
 			if(data != null && typeof data.Output != 'undefined' && data.Output.length > 0)
 			{
@@ -712,7 +738,7 @@ function showConfidence()
 				str  = str +  '</tr>';
 				$('#rdet').append(str);
 			}
-		}
+		},error:function(){$('#loading').hide();}
 			
 		
 	}); 
@@ -726,6 +752,7 @@ function pushOffers()
 	}
 	dataToSearch = dataToSearch = {name: $('#showConfidenceWithProduct option:selected').val()} ;
 	dataToSearch = $.param(dataToSearch);
+	$('#loading').show();
 	$.ajax({
 		url: 'getProductCampaign.html',
 		//url: 'js/sample.js',
@@ -735,6 +762,7 @@ function pushOffers()
 		dataType : "json",
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 		success: function(data){
+			$('#loading').hide();
 			if(data != null && typeof data.Output != 'undefined' && data.Output.length > 0)
 			{
 				str = "Push Offers \n\n\n"
@@ -745,7 +773,7 @@ function pushOffers()
 				alert(str);
 			}
 			
-		}
+		},error:function(){$('#loading').hide();}
 			
 		
 	}); 
@@ -1615,7 +1643,7 @@ $(function(){
 		isTWuseCase = false;
 	});
 	$('#nav_2').on('show.bs.collapse', function () {
-		GSDS.clearMap('customers');
+		/*GSDS.clearMap('customers');
 		$('#directionDetails').html('');
 		$('#directionDetails').hide();
 		$("#lblRoute1").empty();
@@ -1629,12 +1657,12 @@ $(function(){
 		$('#agent').empty();
 		if($('#myDeliveries').is(':checked')){
 			GSDS.showCustomerLocations();
-		}
+		}*/
 		isTWuseCase = false;
 	});
 	
 $('#nav_3').on('show.bs.collapse', function () {
-		GSDS.clearMap('customers');
+		/*GSDS.clearMap('customers');
 		$('#directionDetails').html('');
 		$('#directionDetails').hide();
 		$("#lblRoute1").empty();
@@ -1648,7 +1676,7 @@ $('#nav_3').on('show.bs.collapse', function () {
 		$('#agent').empty();
 		if($('#myDeliveries').is(':checked')){
 			GSDS.showTWCustomerLocations();
-		}
+		}*/
 	});
 	
 	//Add handler for the map click event.
@@ -1688,6 +1716,10 @@ function geocodeAddress(address){
 			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 			success: function(data){
 				_data = data.Output[0];
+				setLocationPosition = new Microsoft.Maps.Location(parseFloat(_data.Latitude,10),parseFloat( _data.Longitude,10));
+				var pin = new Microsoft.Maps.Pushpin(setLocationPosition, {'draggable': false});   
+				GSDS.clearMap('customers');				
+					GSDS.map.entities.push(pin);
 				},
 			beforeSend: function(){
 				$('#loading').show();
@@ -1734,7 +1766,7 @@ function onMapClick(e) {
 				var loc = e.target.tryPixelToLocation(point);
 				var address = reverseGeocode(loc.latitude, loc.longitude)
 			
-				bootbox.confirm("Do you want to add another customer in this route ? <br/> <br/> <B>Address : </B><textarea id='newAddress'>"+address.toLowerCase()+"</textarea>", function(result) {
+				bootbox.confirm("Do you want to add another customer in this route ? <br/> <br/> <B>Address : </B><textarea id='newAddress'></textarea>", function(result) {
 					//if(confirm("Do you want to add another customer in this route ?")){
 					if(result){
 						//alert($('#newAddress').val());
@@ -1934,8 +1966,8 @@ function getCustomer(id){
 
 $( document ).ready(function(){
 	Microsoft.Maps.Events.addHandler(GSDS.map, 'rightclick', onMapClick);
-	$('#btnclose').on('click',function(){
-		
+	$('.btnclose').on('click',function(){
+		$("#rdet").html("<thead><tr><th>Pin Code</th><th>First Day</th><th>Second Day</th><th>Third Day</th><th>Fourth Day</th><th>Fifth Day</th><th>Product Category</th>			</tr></thead><tbody></tbody>");
 		$('#btmgridpanel').hide();
 		//$('#btmgridpanel').css('display','none');
 	});
