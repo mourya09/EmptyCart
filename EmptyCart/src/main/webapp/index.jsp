@@ -196,6 +196,11 @@
 									<label for="agent">Show Confidence Metrics </label><br>
 									<input type="radio" id="pushOffers" name="v11" onclick="pushOffers()" />
 									<label for="agent">Show Push Offers </label><br>
+									<br>
+									<br>
+									<label for="agent">Show Top Three Sellers </label><br>
+									<input type="radio" id="topThreeSellers" name="v11" onclick="topThreeSellers()" />
+									<label for="agent">Show Top Three Sellers </label><br>
 									
 									
 									
@@ -227,7 +232,7 @@
 			<div  class="">
 				<div class="row">
 					<div class="col-lg-6">
-						<a href="http://www.pb.com"><i class="pb-footer-logo gradient"></i></a>© 2015 Pitney Bowes Inc. All rights reserved.
+						<a href="http://www.pb.com"><i class="pb-footer-logo gradient"></i></a>Â© 2015 Pitney Bowes Inc. All rights reserved.
 					</div>
 					<div class="col-lg-6 text-right xs-text-left">
 						<ul class="list-unstyled list-inline social">
