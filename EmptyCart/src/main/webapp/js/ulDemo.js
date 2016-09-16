@@ -6,7 +6,8 @@ var setLocationPosition=null;
 var sellerlocation = null;
 var insideSeller = [];
 var	outsideSeller = [];
-
+var	sellers = [];
+var globalCount = 0;
 GEOAPIS_V1.apiDemo = function(){
 	this.apiAddress = window.location.origin;
 	this.map;
@@ -401,29 +402,41 @@ function showSellerGeofence()
 					var locationArr = [];
 					
 					var newPos = 0;
-					for(var i=0; i<toRender[key].coordinates[0].length; i++){
+					for(var i=0; i<toRender[key].COVERAGE.coordinates[0].length; i++){
 						locationArr[i] = {};						
-						locationArr[i].latitude = toRender[key].coordinates[0][i][1];
-						locationArr[i].longitude = toRender[key].coordinates[0][i][0];
+						locationArr[i].latitude = toRender[key].COVERAGE.coordinates[0][i][1];
+						locationArr[i].longitude = toRender[key].COVERAGE.coordinates[0][i][0];
 						
 						lineVertices[i] = new Microsoft.Maps.Location(locationArr[i].latitude, locationArr[i].longitude);
 						boundlocation.push(locationArr[i]);
 					}
-					var val=Math.floor((Math.random() * 250) + 1);
-					var val1=Math.floor((Math.random() * 250) + 1);
-					var options = {
-									fillColor: new Microsoft.Maps.Color(val, 0, val1, 0),
+					/* var val=Math.floor((Math.random() * 250) + 1);
+					var val1=Math.floor((Math.random() * 250) + 1); */
+					var optionsInside = {
+									fillColor: new Microsoft.Maps.Color(255, 0, 255, 0),
 									//fillColor: colorsArr[i],
-									strokeColor: new Microsoft.Maps.Color(val, 0, val1, 0),
+									strokeColor: new Microsoft.Maps.Color(255, 0, 255, 0),
+									strokeThickness: 3
+								};
+					var optionsOutside = {
+									fillColor: new Microsoft.Maps.Color(255, 255, 0, 0),
+									//fillColor: colorsArr[i],
+									strokeColor: new Microsoft.Maps.Color(255, 255, 0, 0),
 									strokeThickness: 3
 								};
 								
-					var line = new Microsoft.Maps.Polyline(lineVertices, options);
+					var line = null;
+					if(toRender[key].type == "INSIDE"){
+						line =	new Microsoft.Maps.Polyline(lineVertices, optionsInside);
+					}else{
+						line =	new Microsoft.Maps.Polyline(lineVertices, optionsOutside);
+					}
 					GSDS.map.entities.push(line);
-					var pin = new Microsoft.Maps.Pushpin(setLocationPosition, {'draggable': false});             
-					GSDS.map.entities.push(pin);
+					
 					
 			}	
+			var pin = new Microsoft.Maps.Pushpin(setLocationPosition, {'draggable': false});             
+			GSDS.map.entities.push(pin);
 			boundlocation.push(setLocationPosition);
 			var  params = {
 						locations: boundlocation, // An array of locations, or can use bounds: boundsObject
@@ -554,7 +567,7 @@ function searchPart2(dataToSearch)
 					//var _htmlContent= '<img src="pb.png">';
 					
 					data.Output[key].COVERAGE = $.parseJSON(data.Output[key].COVERAGE);
-					toRender.push(data.Output[key].COVERAGE);
+					
 					data.Output[key].Latitude = parseFloat(data.Output[key].Latitude);
 					data.Output[key].Longitude=parseFloat(data.Output[key].Longitude)
 					
@@ -562,10 +575,12 @@ function searchPart2(dataToSearch)
 					if(data.Output[key].TAG == "INSIDE"){						
 						insideSeller.push(data.Output[key]);
 						sellerlocation.push({latitude:data.Output[key].Latitude,longitude:data.Output[key].Longitude, pin : pushpinOptions});
+						toRender.push({COVERAGE:data.Output[key].COVERAGE, type:"INSIDE",SELLER_NAME:data.Output[key].SELLER_NAME,Address:data.Output[key].Address});
 					
 					}else{
 						sellerlocation.push({latitude:data.Output[key].Latitude,longitude:data.Output[key].Longitude, pin : pushpinOptions1});
 						outsideSeller.push(data.Output[key]);
+						toRender.push({COVERAGE:data.Output[key].COVERAGE, type:"OUTSIDE",SELLER_NAME:data.Output[key].SELLER_NAME,Address:data.Output[key].Address});
 					}
 				}
 				
@@ -655,14 +670,26 @@ function showSingleGeofence(masterData, type)
 					}
 					var val=Math.floor((Math.random() * 250) + 1);
 					var val1=Math.floor((Math.random() * 250) + 1);
-					var options = {
-									fillColor: new Microsoft.Maps.Color(val, 0, val1, 0),
+					var optionsInside = {
+									fillColor: new Microsoft.Maps.Color(255, 0, 255, 0),
 									//fillColor: colorsArr[i],
-									strokeColor: new Microsoft.Maps.Color(val, 0, val1, 0),
+									strokeColor: new Microsoft.Maps.Color(255, 0, 255, 0),
+									strokeThickness: 3
+								};
+					var optionsOutside = {
+									fillColor: new Microsoft.Maps.Color(255, 255, 0, 0),
+									//fillColor: colorsArr[i],
+									strokeColor: new Microsoft.Maps.Color(255, 255, 0, 0),
 									strokeThickness: 3
 								};
 								
-					var line = new Microsoft.Maps.Polyline(lineVertices, options);
+					var line =null;
+					if(type == "OUTSIDE"){	
+					line = new Microsoft.Maps.Polyline(lineVertices, optionsOutside);
+					}else{
+						line = new Microsoft.Maps.Polyline(lineVertices, optionsInside);
+					}
+					
 					GSDS.map.entities.push(line);
 					var pin = new Microsoft.Maps.Pushpin(setLocationPosition, {'draggable': false});  
 					GSDS.map.entities.push(pin);	
@@ -706,12 +733,155 @@ function showProductCategory()
 		$('#showConfidenceWithProduct').html(_str);
 	}
 }
-
+function topThreeSellers()
+{
+	$('#loading').show();
+	productVal = $('#showConfidenceWithProduct option:selected').val();
+	var count =1;
+	sellers = [];
+	str = "<thead><tr><th>Seller Name</th><th>First Day</th><th>Second Day</th><th>Third Day</th><th>Fourth Day</th><th>Fifth Day</th></tr></thead><tbody></tbody>";
+	if(typeof outsideSeller != 'undefined' && outsideSeller != null && outsideSeller.length > 0)
+	{
+		for(var key in outsideSeller )
+		{
+			for(var _key in outsideSeller[key].products)
+			{
+				if(productVal == outsideSeller[key].products[_key].Product_category && count < 4)
+				{
+					sellers.push({
+						name:productVal,
+						lattitude:outsideSeller[key].Latitude,
+						longitude:outsideSeller[key].Longitude,
+						SELLER_NAME:outsideSeller[key].SELLER_NAME
+					});
+					count=count +1;
+					break;
+					
+				}
+					if(count >= 4){
+						break;
+					}
+			}
+			if(count >= 4){
+				break;
+			}
+		}
+	}
+	if(typeof insideSeller != 'undefined' && insideSeller != null && insideSeller.length > 0 && count < 4)
+	{
+		for(var key in insideSeller )
+		{
+			for(var _key in insideSeller[key].products)
+			{
+				if(productVal == insideSeller[key].products[_key].Product_category && count < 4)
+				{
+					sellers.push({
+						name:productVal,
+						lattitude:insideSeller[key].Latitude,
+						longitude:insideSeller[key].Longitude,
+						SELLER_NAME:insideSeller[key].SELLER_NAME
+					});
+					count=count +1;
+					break;
+					
+				}
+					if(count >= 4){
+						break;
+					}
+			}
+			if(count >= 4){
+				break;
+			}
+		}
+	}
+	
+	if(sellers != null && sellers.length > 2)
+	{
+		$('#rdet').html(str);
+		globalCount = 0;
+		for(var key in sellers)
+		{
+			dataToSearch = {name:sellers[key].name ,
+			lattitude:sellers[key].lattitude , 
+			longitude:sellers[key].longitude} ;
+		dataToSearch = $.param(dataToSearch);
+		str = str + "<td>" + sellers[key].SELLER_NAME + "</td>";
+		$.ajax({
+		url: 'getConfidenceMetrics.html',
+		data: dataToSearch,
+		type:'POST',
+		cache: false,
+		async:false,
+		dataType : "json",
+		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+		success: function(data){
+			if(data != null && typeof data.Output != 'undefined' && data.Output.length > 0)
+			{
+				//str = str + "<tr>"; 
+				var count = 0;
+				var setVal = false;
+				
+					/*if(count > 0)
+					{
+						str = str + " <td>" + data.Output[0][key] + "</td>";
+					}*/
+					
+					
+						if(typeof sellers[globalCount].First_Day == 'undefined')
+						{
+							
+							str = "";
+							sellers[globalCount].First_Day = new Object();
+							sellers[globalCount].First_Day =data.Output[0].First_Day;
+							sellers[globalCount].Second_Day = new Object();
+							sellers[globalCount].Second_Day =data.Output[0].Second_Day;
+							sellers[globalCount].Third_Day = new Object();
+							sellers[globalCount].Third_Day =data.Output[0].Third_Day;
+							sellers[globalCount].Fourth_Day = new Object();
+							sellers[globalCount].Fourth_Day =data.Output[0].Fourth_Day;
+							sellers[globalCount].Fifth_Day = new Object();
+							sellers[globalCount].Fifth_Day =data.Output[0].Fifth_Day;
+							sellers[globalCount].First_Day = new Object();
+							sellers[globalCount].First_Day =data.Output[0].First_Day;	
+							setVal = true;							
+							str = str + "<tr><td>" + sellers[globalCount].SELLER_NAME + "</td>";
+							str = str + "<td>" + data.Output[0].First_Day + "</td>";
+							str = str + "<td>" + data.Output[0].Second_Day + "</td>";
+							str = str + "<td>" + data.Output[0].Third_Day + "</td>";
+							str = str + "<td>" + data.Output[0].Fourth_Day + "</td>";
+							str = str + "<td>" + data.Output[0].Fifth_Day + "</td></tr>";
+							globalCount=globalCount + 1;
+							$('#rdet').append(str);
+														
+						}
+					
+				
+				/*str  = str +  '</tr>';*/
+				
+			}
+		},error:function(){$('#loading').hide();}
+			
+		
+	}); 
+		}
+		$('#loading').hide();
+		$('#btmgridpanel').show();
+		
+	}
+}
 function showConfidence()
 {
 	dataToSearch = {name: $('#showConfidenceWithProduct option:selected').val(),lattitude:$('#showConfidenceWithProduct option:selected').attr('lattitude') , longitude:$('#showConfidenceWithProduct option:selected').attr('longitude')} ;
 	$('#loading').show();
-	
+	str = "<thead><tr><th>Pin Code</th><th>First Day</th><th>Second Day</th><th>Third Day</th><th>Fourth Day</th><th>Fifth Day</th><th>Product Category</th>			</tr></thead><tbody></tbody>";
+	_dataVal = $('#rdet').html();
+	if(_dataVal.indexOf("Product Category") > -1)
+	{
+		
+	}else{
+		$('#rdet').html(str);
+		
+	}
 	dataToSearch = $.param(dataToSearch);
 	$.ajax({
 		url: 'getConfidenceMetrics.html',
@@ -723,9 +893,10 @@ function showConfidence()
 		success: function(data){
 			$('#loading').hide();
 			$('#btmgridpanel').show();
+			
 			if(data != null && typeof data.Output != 'undefined' && data.Output.length > 0)
 			{
-				str = "<tr>"
+				str =  "<tr>"
 				var count = 0;
 				for(var key in data.Output[0])
 				{
@@ -743,6 +914,8 @@ function showConfidence()
 		
 	}); 
 }
+
+
 function pushOffers()
 {
 	if($('#showConfidenceWithProduct option:selected').attr('type') == "INSIDE")
