@@ -795,7 +795,7 @@ function topThreeSellers()
 		}
 	}
 	
-	if(sellers != null && sellers.length > 2)
+	if(sellers != null && sellers.length > 1)
 	{
 		$('#rdet').html(str);
 		globalCount = 0;
@@ -841,15 +841,14 @@ function topThreeSellers()
 							sellers[globalCount].Fourth_Day =data.Output[0].Fourth_Day;
 							sellers[globalCount].Fifth_Day = new Object();
 							sellers[globalCount].Fifth_Day =data.Output[0].Fifth_Day;
-							sellers[globalCount].First_Day = new Object();
-							sellers[globalCount].First_Day =data.Output[0].First_Day;	
+							
 							setVal = true;							
 							str = str + "<tr><td>" + sellers[globalCount].SELLER_NAME + "</td>";
-							str = str + "<td>" + data.Output[0].First_Day + "</td>";
-							str = str + "<td>" + data.Output[0].Second_Day + "</td>";
-							str = str + "<td>" + data.Output[0].Third_Day + "</td>";
-							str = str + "<td>" + data.Output[0].Fourth_Day + "</td>";
-							str = str + "<td>" + data.Output[0].Fifth_Day + "</td></tr>";
+							str = str + "<td>" + ((typeof data.Output[0].First_Day == 'undefined')?"Not Available":data.Output[0].First_Day) + "</td>";
+							str = str + "<td>" + ((typeof data.Output[0].Second_Day == 'undefined')?"Not Available":data.Output[0].Second_Day)+ "</td>";
+							str = str + "<td>" + ((typeof data.Output[0].Third_Day == 'undefined')?"Not Available":data.Output[0].Third_Day)+ "</td>";
+							str = str + "<td>" + ((typeof data.Output[0].Fourth_Day == 'undefined')?"Not Available":data.Output[0].Fourth_Day) + "</td>";
+							str = str + "<td>" + ((typeof data.Output[0].Fifth_Day == 'undefined')?"Not Available":data.Output[0].Fifth_Day) + "</td></tr>";
 							globalCount=globalCount + 1;
 							$('#rdet').append(str);
 														
@@ -923,7 +922,7 @@ function pushOffers()
 		alert("Please the Seller from Outside region");
 		return;
 	}
-	dataToSearch = dataToSearch = {name: $('#showConfidenceWithProduct option:selected').val()} ;
+	dataToSearch = {name: $('#showConfidenceWithProduct option:selected').val()} ;
 	dataToSearch = $.param(dataToSearch);
 	$('#loading').show();
 	$.ajax({
@@ -935,16 +934,19 @@ function pushOffers()
 		dataType : "json",
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 		success: function(data){
-			$('#loading').hide();
+			
+			$('#rdet').html("");
+				str = "<thead><tr><th>Seller Name</th><th>Push Offer</th></tr></thead><tbody></tbody>";
+				str = str + '<tr><td>'+ $('#showConfidence option:selected').html() +'</td><td>';
 			if(data != null && typeof data.Output != 'undefined' && data.Output.length > 0)
 			{
-				str = "Push Offers \n\n\n"
-				for(var key in data.Output[0])
-				{
-					str = str + key + "  :  " + data.Output[0][key] + "\n";
-				}
-				alert(str);
+					str = str+ data.Output[0].Offer;
+				
 			}
+			str = str + '</td></tr>';
+			$('#rdet').append(str);
+			$('#loading').hide();
+			$('#btmgridpanel').show();
 			
 		},error:function(){$('#loading').hide();}
 			
