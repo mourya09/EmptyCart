@@ -18,8 +18,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.voltdb.client.Client;
-
+/*import org.voltdb.client.Client;
+*/
 import com.cer.persistent.Currency;
 import com.cer.persistent.UserDetails;
 import com.cer.services.CERService;
@@ -82,7 +82,7 @@ public class CurrencyTest {
 	@Test
 	public void majeTest()
 	{
-		try {
+		/*try {
 			Client client = voltClient.getClient();
 			if(client != null)
 			{
@@ -94,7 +94,7 @@ public class CurrencyTest {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	@Test

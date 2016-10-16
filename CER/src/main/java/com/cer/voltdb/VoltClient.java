@@ -1,22 +1,14 @@
 package com.cer.voltdb;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.voltdb.client.Client;
+/*import org.voltdb.client.Client;
 import org.voltdb.client.ClientConfig;
-import org.voltdb.client.ClientFactory;
-
-import com.cer.util.PropertyConfigurer;
+import org.voltdb.client.ClientFactory;*/
 
 @Component 
 @Scope("singleton")
-public class VoltClient {
+public class VoltClient {/*
 
 	protected final Logger logger = LoggerFactory.getLogger(VoltClient.class);
 	
@@ -31,7 +23,7 @@ public class VoltClient {
 	
 	private String username;
 
-	/*@Value("#{systemProperties.hostpassword}")*/
+	@Value("#{systemProperties.hostpassword}")
 	private String password;
 
 	public Client getClient() throws UnknownHostException, IOException {
@@ -69,4 +61,4 @@ public class VoltClient {
 		logger.info("initConnections  end ");
 	}
 
-}
+*/}

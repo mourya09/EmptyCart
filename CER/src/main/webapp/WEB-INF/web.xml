@@ -7,7 +7,7 @@
   <context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath:CER.xml		
+			classpath:CER.xml
 		</param-value>
 	</context-param>
 

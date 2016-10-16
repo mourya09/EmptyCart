@@ -20,13 +20,34 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
         <property name="hibernate.max_fetch_depth">5</property>
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">validate</property>
 
-        <!-- mappings for annotated classes -->
-                <!-- mappings for annotated classes -->
-        <mapping class="com.cer.persistent.UserDetails"/>
-        <mapping class="com.cer.persistent.UserRole"/>
+      
+        <!-- <mapping class="com.cer.persistent.UserRole"/>
         <mapping class="com.cer.persistent.Currency"/>
-         <mapping class="com.cer.persistent.CurrencyExchangeRate"/>
+         <mapping class="com.cer.persistent.CurrencyExchangeRate"/> -->
+          <!-- Enable L2 cache. -->
+        <property name="cache.use_second_level_cache">true</property>
+        
+        <!-- Generate L2 cache statistics. -->
+        <property name="generate_statistics">true</property>
+         <property name="hibernate.cache.region.factory_class">org.apache.ignite.cache.hibernate.HibernateRegionFactory</property>
+        
+        <!-- Specify the name of the grid, that will be used for second level caching. -->
+        <property name="org.apache.ignite.hibernate.grid_name">hibernate-grid</property> 
+        <!-- Specify connection release mode. -->
+        <property name="connection.release_mode">on_close</property>
+        
+        <!-- Set default L2 cache access type. -->
+        <property name="org.apache.ignite.hibernate.default_access_type">READ_ONLY</property>
+          <!-- mappings for annotated classes -->
+                <!-- mappings for annotated classes -->
+        <mapping class="com.cer.persistent.CompanySymbol" />
+        <mapping class="com.cer.persistent.LiveShares" />
+         <!-- Per-class L2 cache settings. -->
+        <class-cache class="com.cer.persistent.CompanySymbol"  usage="read-only" />
+        <class-cache class="com.cer.persistent.LiveShares"  usage="read-only" />
+         <!--  <collection-cache collection="com.cer.persistent.LiveShares.symbolid" usage="read-only" /> -->
+        
     </session-factory>
 </hibernate-configuration>

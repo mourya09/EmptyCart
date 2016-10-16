@@ -34,13 +34,53 @@
 			</list>
 		</property>
 	</bean>
+	
+	<!-- Apache Ignite places Start -->
+	<bean id="ignite.cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+        <property name="gridName" value="TestGrid"/>
+        <!-- Enable client mode. -->
+        <property name="clientMode" value="true"/>
+
+        <property name="cacheConfiguration">
+            <list>
+                <!-- Partitioned cache example configuration (Atomic mode). -->
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <!--<property name="atomicityMode" value="ATOMIC"/>-->
+                    <!-- Set cache mode. -->
+                    <property name="cacheMode" value="PARTITIONED"/>
+                    <property name="backups" value="1"/>
+                    <property name="statisticsEnabled" value="true" />
+                </bean>
+            </list>
+        </property>
+        <!-- Explicitly configure TCP discovery SPI to provide list of initial nodes. -->
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="ipFinder">
+                    <!-- Uncomment static IP finder to enable static-based discovery of initial nodes. -->
+                    <!--<bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">-->
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder">
+                        <property name="addresses">
+                            <list>
+                                <!-- In distributed environment, replace with actual host IP address. -->
+                                <value>${APACHE_SERVER_1}</value>
+                               <!--  <value>add your node ip address</value> -->
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+	<!-- Apache Ignite places  End -->
 
 	<!-- enable the configuration of transactional behavior based on annotations -->
 	<tx:annotation-driven transaction-manager="telenorTransactionManager" />
 
 	<!-- Transaction Manager -->
 
-	<bean id="telenorTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	<bean id="telenorTransactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	<bean id="sessionFactory"
@@ -49,67 +89,70 @@
 		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
 	</bean>
 	<!-- Declare a JPA entityManagerFactory -->
-	<!-- <bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="persistenceXmlLocation" value="classpath:persistence.xml"></property>
-		<property name="persistenceUnitName" value="hibernatePersistenceUnit" />
-		<property name="dataSource" ref="dataSourceBean" />
-		<property name="jpaVendorAdapter">
-			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-				<property name="showSql" value="true" />
-			</bean>
-		</property>
-	</bean> -->
+	<!-- <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
+		<property name="persistenceXmlLocation" value="classpath:persistence.xml"></property> 
+		<property name="persistenceUnitName" value="hibernatePersistenceUnit" /> 
+		<property name="dataSource" ref="dataSourceBean" /> <property name="jpaVendorAdapter"> 
+		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"> 
+		<property name="showSql" value="true" /> </bean> </property> </bean> -->
 
-	 <bean id="dataSourceBean" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
-		<property name="driverClassName" value="${driverClassName}" /> <property 
-		name="url" value="${databaseUrlEgis}" /> <property name="username" value="${liDatabaseUserName}" 
-		/> <property name="password" value="${liDatabasePassword}" /> </bean> 
-	
+	<bean id="dataSourceBean"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="url" value="${databaseUrlEgis}" />
+		<property name="username" value="${liDatabaseUserName}" />
+		<property name="password" value="${liDatabasePassword}" />
+	</bean>
+
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-	  <!-- REST -->
-    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-        <property name="order" value="1" />
-        <property name="contentNegotiationManager">
-            <bean class="org.springframework.web.accept.ContentNegotiationManager">
-                <constructor-arg>
-                    <bean class="org.springframework.web.accept.PathExtensionContentNegotiationStrategy">
-                        <constructor-arg>
-                            <map>
-                                <entry key="json" value="application/json"/>
-                                <entry key="xml" value="application/xml"/>
-                                <entry key="xml" value="application/x-www-form-urlencoded"/>
-                            </map>
-                        </constructor-arg>
-                    </bean>
-                </constructor-arg>
-            </bean>
-        </property>
+	<!-- REST -->
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="contentNegotiationManager">
+			<bean class="org.springframework.web.accept.ContentNegotiationManager">
+				<constructor-arg>
+					<bean
+						class="org.springframework.web.accept.PathExtensionContentNegotiationStrategy">
+						<constructor-arg>
+							<map>
+								<entry key="json" value="application/json" />
+								<entry key="xml" value="application/xml" />
+								<entry key="xml" value="application/x-www-form-urlencoded" />
+							</map>
+						</constructor-arg>
+					</bean>
+				</constructor-arg>
+			</bean>
+		</property>
 
 
-        <property name="defaultViews">
-            <list>
-                <!-- JSON View -->
-                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+		<property name="defaultViews">
+			<list>
+				<!-- JSON View -->
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
 
-                <!-- XML View -->
-                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
-                    <constructor-arg>
-                        <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-                            <property name="packagesToScan">
-                                <list>
-                                    <value>com.cer</value>
-                                </list>
-                            </property>
-                        </bean>
-                    </constructor-arg>
-                </bean>
-            </list>
-        </property>
-    </bean>
+				<!-- XML View -->
+				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<constructor-arg>
+						<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+							<property name="packagesToScan">
+								<list>
+									<value>com.cer</value>
+								</list>
+							</property>
+						</bean>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
 
+	
 
+	
 
 	<bean id="cerDao" class="com.cer.dao.impl.CERDaoImpl" scope="singleton" />
 
@@ -118,6 +161,12 @@
 
 	<bean id="dcmDao" class="com.cer.dao.impl.DCMDaoImpl" scope="singleton" />
 
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="50" />
+		<property name="maxPoolSize" value="2000" />
+		<property name="WaitForTasksToCompleteOnShutdown" value="true" />
+	</bean>
 
 
 </beans>
