@@ -17,7 +17,7 @@
     <property name="writeSynchronizationMode" value="FULL_SYNC"/>
     </bean>
 
-    <bean id="ignite.cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+    <bean id="ignite_cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
     <!-- 
         Specify the name of the caching grid (should correspond to the 
         one in Hibernate configuration).
@@ -29,21 +29,7 @@
         to a full class name or a full association name).
     -->
     <property name="cacheConfiguration">
-        <list>
-            <!--
-                Configurations for entity caches.
-            -->
-<!--             <bean parent="transactional-cache">
-                <property name="name" value="com.mycompany.MyEntity1"/>
-            </bean>
-            <bean parent="transactional-cache">
-                <property name="name" value="com.mycompany.MyEntity2"/>
-            </bean>
-            <bean parent="transactional-cache">
-                <property name="name" value="com.mycompany.MyEntity1.children"/>
-            </bean>
-  -->
-            <!-- Configuration for update timestamps cache. -->
+        <list>            
             <bean parent="atomic-cache">
                 <property name="name" value="org.hibernate.cache.spi.UpdateTimestampsCache"/>
             </bean>
